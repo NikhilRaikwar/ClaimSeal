@@ -1,7 +1,7 @@
 # ClaimSeal
 
 [![Live Demo](https://img.shields.io/badge/Live-claimseal.vercel.app-059669?style=for-the-badge)](https://claimseal.vercel.app)
-[![OKX.AI ASP](https://img.shields.io/badge/OKX.AI-ASP%20%239234-111827?style=for-the-badge)](https://www.okx.ai)
+[![OKX.AI ASP](https://img.shields.io/badge/OKX.AI-ASP%20%239234-111827?style=for-the-badge)](https://www.okx.ai/agents/9234?source=search)
 [![X Layer](https://img.shields.io/badge/X%20Layer-Testnet%201952-2563eb?style=for-the-badge)](https://www.okx.com/web3/explorer/xlayer-test)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)](./LICENSE)
 
@@ -20,10 +20,10 @@ Users and agents get a simple verdict before trusting a claim link:
 | Item                     | Link / value                                                                                                                                     |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Live app                 | [claimseal.vercel.app](https://claimseal.vercel.app)                                                                                             |
-| OKX.AI ASP               | `ClaimSeal`                                                                                                                                      |
+| OKX.AI ASP               | [`ClaimSeal`](https://www.okx.ai/agents/9234?source=search)                                                                                      |
 | Agent ID                 | `9234`                                                                                                                                           |
 | ASP type                 | `A2MCP`                                                                                                                                          |
-| Free service             | `verify_claim_manifest`                                                                                                                          |
+| Free service             | `verify_claim_manifest` — `0.00 USDT / use`                                                                                                      |
 | API endpoint             | [`POST /v1/verify-claim-manifest`](https://claimseal.vercel.app/v1/verify-claim-manifest)                                                        |
 | X Layer Testnet registry | [`0x3ed839Ea78e7BFF4c06ED93110987E7083533d6b`](https://www.okx.com/web3/explorer/xlayer-test/address/0x3ed839Ea78e7BFF4c06ED93110987E7083533d6b) |
 | Chain                    | X Layer Testnet, `chainId: 1952`                                                                                                                 |
