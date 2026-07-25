@@ -122,7 +122,10 @@ export function canonicalStringify(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map((item) => canonicalStringify(item)).join(",")}]`;
   if (value !== null && typeof value === "object") {
     const object = value as Record<string, unknown>;
+    // Match JSON.stringify semantics: optional fields that have no value are
+    // omitted instead of becoming the invalid token `undefined` on-chain.
     return `{${Object.keys(object)
+      .filter((key) => object[key] !== undefined)
       .sort()
       .map((key) => `${JSON.stringify(key)}:${canonicalStringify(object[key])}`)
       .join(",")}}`;

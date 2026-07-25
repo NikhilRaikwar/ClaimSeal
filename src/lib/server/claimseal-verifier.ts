@@ -85,6 +85,7 @@ type OnchainRecord = {
   campaignId: Hex;
   issuer: Address;
   manifestHash: Hex;
+  rawManifest: string;
   validFrom: bigint;
   validUntil: bigint;
   revision: bigint;
@@ -114,6 +115,28 @@ function getClient(config: RegistryConfig) {
   return createPublicClient({ transport: http(config.rpcUrl) });
 }
 
+function parseStoredManifest(rawManifest: string): ClaimManifest {
+  try {
+    return parseManifest(JSON.parse(rawManifest));
+  } catch {
+    // A first-version serializer wrote optional xHandle as the JavaScript token
+    // `undefined`. Accept that already-anchored legacy payload without changing
+    // its raw bytes or its on-chain hash.
+    const legacyJson = rawManifest.replace(/"xHandle":undefined(?=[,}])/g, '"xHandle":null');
+    const legacyValue = JSON.parse(legacyJson);
+    if (
+      legacyValue &&
+      typeof legacyValue === "object" &&
+      !Array.isArray(legacyValue) &&
+      "xHandle" in legacyValue &&
+      legacyValue.xHandle === null
+    ) {
+      legacyValue.xHandle = undefined;
+    }
+    return parseManifest(legacyValue);
+  }
+}
+
 async function readRecord(
   config: RegistryConfig,
   campaignId: Hex,
@@ -134,12 +157,13 @@ async function readRecord(
     functionName: "getManifest",
     args: [campaignId],
   });
-  const manifest = parseManifest(JSON.parse(rawManifest));
+  const manifest = parseStoredManifest(rawManifest);
 
   return {
     campaignId,
     issuer: getAddress(issuer),
     manifestHash: anchoredHash,
+    rawManifest,
     validFrom,
     validUntil,
     revision,
@@ -238,7 +262,9 @@ async function signatureIsValid(record: OnchainRecord, config: RegistryConfig) {
   if (record.manifest.revision !== Number(record.revision)) return false;
   if (record.manifest.validFrom !== Number(record.validFrom)) return false;
   if (record.manifest.validUntil !== Number(record.validUntil)) return false;
-  if (manifestHash(record.manifest).toLowerCase() !== record.manifestHash.toLowerCase())
+  if (
+    keccak256(stringToHex(record.rawManifest)).toLowerCase() !== record.manifestHash.toLowerCase()
+  )
     return false;
 
   return verifyTypedData({
