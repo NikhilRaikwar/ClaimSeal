@@ -90,13 +90,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ClaimSeal — Verify a claim before you connect" },
+      { title: "ClaimSeal - Verify a claim before you connect" },
       {
         name: "description",
         content:
-          "ClaimSeal checks a campaign URL and contract against a wallet-signed record anchored on X Layer Testnet.",
+          "ClaimSeal verifies campaign URLs and contracts against issuer-signed records anchored on X Layer Testnet.",
       },
+      { property: "og:title", content: "ClaimSeal - Verify a claim before you connect" },
+      {
+        property: "og:description",
+        content:
+          "Verify token claim links before connecting a wallet. ClaimSeal checks URL and contract details against an issuer-signed X Layer Testnet record.",
+      },
+      { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "ClaimSeal - Verify a claim before you connect" },
+      {
+        name: "twitter:description",
+        content:
+          "Verify token claim links before connecting a wallet with issuer-signed records on X Layer Testnet.",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

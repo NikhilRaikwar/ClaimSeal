@@ -8,8 +8,8 @@ export function SiteHeader() {
   return (
     <nav className="flex items-center justify-between gap-3 px-4 sm:px-6 md:px-10 py-4 sm:py-6 max-w-7xl mx-auto">
       <Link to="/" className="flex min-w-0 shrink items-center gap-2.5 group">
-        <div className="size-9 bg-emerald-bold rounded-full rotate-12 flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-emerald-bold/20 group-hover:rotate-45 transition-transform duration-500">
-          C
+        <div className="size-9 overflow-hidden rounded-xl rotate-12 bg-ink shadow-lg shadow-emerald-bold/20 transition-transform duration-500 group-hover:rotate-45">
+          <img src="/claimseal-mark.svg" alt="" className="size-full" />
         </div>
         <span className="font-display text-xl tracking-tight">
           ClaimSeal<span className="text-emerald-bold">.</span>

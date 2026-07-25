@@ -12,9 +12,14 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Paste a campaign URL and check it against a wallet-signed record anchored on X Layer Testnet. No wallet connection required.",
+          "Paste a campaign URL and contract to verify them against an issuer-signed record anchored on X Layer Testnet. No wallet connection required.",
       },
       { property: "og:title", content: "ClaimSeal - Verify a claim before you connect" },
+      {
+        property: "og:description",
+        content:
+          "A public verifier for token claim links: MATCH, MISMATCH, or NOT PUBLISHED before users connect a wallet.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
