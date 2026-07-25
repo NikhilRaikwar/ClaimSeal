@@ -132,14 +132,14 @@ function VerifyPage() {
                   href={`${XLAYER_TESTNET_EXPLORER}/address/${result.campaign.registryAddress}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-1.5 px-5 py-3 rounded-full bg-white border border-stone-200 text-sm font-medium hover:border-ink transition-colors sm:w-auto"
+                  className="seal-button w-full border border-stone-200 bg-white px-5 py-3 text-sm sm:w-auto"
                 >
                   View registry on testnet <ArrowUpRight aria-hidden className="size-4 shrink-0" />
                 </a>
               )}
               <button
                 onClick={copyLink}
-                className="inline-flex w-full items-center justify-center px-5 py-3 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform sm:w-auto"
+                className="seal-button w-full bg-ink px-5 py-3 text-sm text-cream-50 sm:w-auto"
               >
                 {copied ? "Link copied" : "Share result"}
               </button>
@@ -158,7 +158,7 @@ function VerifyPage() {
 
 function LoadingResult({ url }: { url: string }) {
   return (
-    <div className="bg-white rounded-[32px] border border-stone-200 p-6 sm:p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)] animate-fade-up">
+    <div className="surface-card rounded-[32px] p-6 animate-fade-up sm:p-10 md:p-14">
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
         ClaimSeal / Verifying
       </p>
@@ -175,7 +175,7 @@ function LoadingResult({ url }: { url: string }) {
 
 function ErrorResult({ error }: { error: string }) {
   return (
-    <div className="bg-white rounded-[32px] border border-coral-bold/30 p-6 sm:p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
+    <div className="surface-card rounded-[32px] border-coral-bold/30 p-6 animate-fade-up sm:p-10 md:p-14">
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-coral-bold">
         Verification unavailable
       </p>

@@ -1,91 +1,196 @@
 # ClaimSeal
 
-[![CI](https://github.com/NikhilRaikwar/ClaimSeal/actions/workflows/ci.yml/badge.svg)](https://github.com/NikhilRaikwar/ClaimSeal/actions/workflows/ci.yml)
-[![X Layer Testnet](https://img.shields.io/badge/X%20Layer-Testnet-111827?logo=okx&logoColor=white)](https://web3.okx.com/onchainos/dev-docs/xlayer/developer/build-on-xlayer/network-information)
-[![Build X](https://img.shields.io/badge/Build%20X-Software%20Utility-0f766e)](https://web3.okx.com/xlayer/build-x-series)
-[![Vercel Analytics](https://img.shields.io/badge/Vercel-Analytics-black?logo=vercel)](https://vercel.com/docs/analytics)
+[![Live Demo](https://img.shields.io/badge/Live-claimseal.vercel.app-059669?style=for-the-badge)](https://claimseal.vercel.app)
+[![OKX.AI ASP](https://img.shields.io/badge/OKX.AI-ASP%20%239234-111827?style=for-the-badge)](https://www.okx.ai)
+[![X Layer](https://img.shields.io/badge/X%20Layer-Testnet%201952-2563eb?style=for-the-badge)](https://www.okx.com/web3/explorer/xlayer-test)
+[![License: MIT](https://img.shields.io/badge/License-MIT-f59e0b?style=for-the-badge)](./LICENSE)
 
-> **Verify a claim before you connect.** ClaimSeal is a public, read-only verifier for token-claim, mint, migration, and bridge campaign records.
+> Verify a claim before you connect.
 
-An issuer signs a human-readable EIP-712 manifest that binds an official HTTPS URL, an optional contract address, and a validity window. ClaimSeal anchors the manifest hash in an X Layer Testnet registry, then returns an explainable verification result to a visitor or agent — **without asking the verifier to connect a wallet**.
+ClaimSeal is a public verifier and OKX.AI Agent Service Provider that checks whether a token-claim campaign URL and optional claim contract match an issuer-signed record anchored on X Layer Testnet.
 
-## Why it matters
+Users and agents get a simple verdict before trusting a claim link:
 
-Campaign links are routinely copied, shortened, and impersonated. ClaimSeal gives launch teams a cryptographic source of truth for their official campaign details and gives users a fast answer before they connect a wallet or take action.
+- `MATCH` — the checked URL and contract match the active issuer-signed record.
+- `MISMATCH` — a known campaign record exists, but one or more checked fields differ.
+- `NOT_PUBLISHED` — no matching ClaimSeal record was found.
 
-| Product fact             | Value                                        |
-| ------------------------ | -------------------------------------------- |
-| Primary Build X category | Software Utility / Software Services         |
-| Network                  | X Layer Testnet (`chainId: 1952`)            |
-| Registry                 | `0x3ed839ea78e7bff4c06ed93110987e7083533d6b` |
-| Agent service            | `POST /v1/verify-claim-manifest`             |
-| Verdicts                 | `MATCH`, `MISMATCH`, `NOT_PUBLISHED`         |
-| Verifier wallet          | Never required                               |
+## Live links
 
-## How it works
+| Item                     | Link / value                                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Live app                 | [claimseal.vercel.app](https://claimseal.vercel.app)                                                                                             |
+| OKX.AI ASP               | `ClaimSeal`                                                                                                                                      |
+| Agent ID                 | `9234`                                                                                                                                           |
+| ASP type                 | `A2MCP`                                                                                                                                          |
+| Free service             | `verify_claim_manifest`                                                                                                                          |
+| API endpoint             | [`POST /v1/verify-claim-manifest`](https://claimseal.vercel.app/v1/verify-claim-manifest)                                                        |
+| X Layer Testnet registry | [`0x3ed839Ea78e7BFF4c06ED93110987E7083533d6b`](https://www.okx.com/web3/explorer/xlayer-test/address/0x3ed839Ea78e7BFF4c06ED93110987E7083533d6b) |
+| Chain                    | X Layer Testnet, `chainId: 1952`                                                                                                                 |
+
+## Why ClaimSeal exists
+
+Fake claim links and typo domains are hard for users to judge quickly. A phishing page can copy a campaign design, swap a contract, and pressure users to connect a wallet.
+
+ClaimSeal gives campaign issuers a signed source of truth and gives users, wallets, and AI agents a fast read-only check before any wallet interaction.
+
+## Build X / OKX.AI fit
+
+ClaimSeal targets the OKX.AI Genesis Hackathon requirement directly:
+
+- It is a practical ASP that solves a clear real-world use case.
+- It is listed as an OKX.AI Agent Service Provider.
+- It exposes a free A2MCP-style HTTP service for agent-native verification.
+- It is live on X Layer Testnet with a public registry and real verification flow.
+- It is strongest for the `Software Utility` / `Software Services` category.
+
+## Architecture
 
 ```mermaid
 flowchart LR
-  I[Issuer wallet] -->|signs EIP-712 manifest| P[ClaimSeal publisher]
-  P -->|publish manifest hash| R[ClaimSealRegistry\nX Layer Testnet]
-  V[Visitor or AI agent] -->|URL + optional contract| A[ClaimSeal Verify API]
-  A -->|read campaign record| R
-  A -->|verify signature, hash, dates\nand canonical URL| E[Evidence engine]
-  E --> O{Deterministic verdict}
-  O -->|all active fields agree| M[MATCH]
-  O -->|known record conflicts| X[MISMATCH]
-  O -->|no matching record| N[NOT PUBLISHED]
+  classDef user fill:#ecfdf5,stroke:#059669,color:#064e3b,stroke-width:2px
+  classDef app fill:#fff7ed,stroke:#d97706,color:#78350f,stroke-width:2px
+  classDef chain fill:#eff6ff,stroke:#2563eb,color:#1e3a8a,stroke-width:2px
+  classDef result fill:#f8fafc,stroke:#111827,color:#111827,stroke-width:2px
+  classDef bad fill:#fff1f2,stroke:#e11d48,color:#881337,stroke-width:2px
+
+  Issuer["Issuer wallet"]:::user
+  Publisher["ClaimSeal publisher UI"]:::app
+  Registry["ClaimSealRegistry<br/>X Layer Testnet"]:::chain
+  Visitor["User / wallet / AI agent"]:::user
+  API["verify_claim_manifest<br/>OKX.AI A2MCP service"]:::app
+  Engine["Evidence engine<br/>URL, contract, signature, hash, dates"]:::chain
+  Match["MATCH"]:::user
+  Mismatch["MISMATCH"]:::bad
+  NotPublished["NOT PUBLISHED"]:::result
+
+  Issuer -->|"Signs EIP-712 campaign manifest"| Publisher
+  Publisher -->|"Anchors manifest hash + record"| Registry
+  Visitor -->|"Submits HTTPS URL + optional contract"| API
+  API -->|"Reads issuer record"| Registry
+  API --> Engine
+  Engine -->|"All active fields agree"| Match
+  Engine -->|"Known record conflicts"| Mismatch
+  Engine -->|"No matching record"| NotPublished
 ```
 
-### Issuer flow
+## Product flow
 
 ```mermaid
 sequenceDiagram
   actor Issuer
-  participant UI as ClaimSeal dashboard
-  participant Wallet as RainbowKit wallet
-  participant Registry as X Layer registry
+  actor User
+  participant UI as ClaimSeal Web App
+  participant Wallet as RainbowKit Wallet
+  participant Registry as X Layer Registry
+  participant ASP as OKX.AI ASP Endpoint
 
   Issuer->>UI: Connect issuer wallet
-  UI->>Wallet: Request connection / switch to chain 1952
-  Wallet-->>UI: Connected address
-  UI->>Wallet: Sign readable EIP-712 campaign manifest
-  Wallet-->>UI: Signature
-  UI->>Wallet: Send publish transaction
-  Wallet->>Registry: publish(manifest hash, JSON)
-  Registry-->>UI: Campaign anchored
+  UI->>Wallet: Switch to X Layer Testnet
+  Issuer->>UI: Enter campaign URL, contract, validity window
+  UI->>Wallet: Sign EIP-712 manifest
+  Wallet->>Registry: Publish signed manifest record
+  User->>UI: Paste claim URL + optional contract
+  UI->>ASP: verify_claim_manifest
+  ASP->>Registry: Read campaign evidence
+  ASP-->>UI: MATCH / MISMATCH / NOT_PUBLISHED
 ```
 
-## Features
+## What gets verified
 
-- Public verification with no wallet connection, token approval, or custody.
-- Issuer-only campaign publishing, revision, and revocation.
-- RainbowKit + Wagmi wallet flow with automatic dashboard redirect after connection.
-- EIP-712 issuer signatures, canonical URL matching, manifest hash checks, onchain issuer checks, validity checks, and revision checks.
-- A clean evidence card for every verdict instead of an unexplained “safe” label.
-- A free A2MCP-compatible HTTP service for the OKX.AI marketplace.
-- Privacy-safe Vercel Web Analytics: page-view query strings and fragments are removed before events are sent.
+| Evidence                        | Why it matters                                                     |
+| ------------------------------- | ------------------------------------------------------------------ |
+| Canonical HTTPS host and path   | Catches typo domains and copied phishing pages.                    |
+| Optional claim contract address | Catches swapped or malicious claim contracts.                      |
+| Issuer wallet                   | Confirms the campaign came from the expected signer.               |
+| EIP-712 signature               | Proves the issuer signed the manifest contents.                    |
+| Manifest hash                   | Proves the displayed JSON matches the anchored record.             |
+| Validity window                 | Prevents expired or not-yet-active campaigns from appearing valid. |
+| Revocation status               | Lets issuers pull a stale or compromised campaign record.          |
 
-## Trust boundaries
+## API
 
-ClaimSeal verifies an issuer-signed campaign record. It does **not** audit smart contracts, inspect token economics, guarantee that a website is safe, execute a transaction, or collect private keys.
+### `POST /v1/verify-claim-manifest`
 
-| Verdict         | Meaning                                                                                                |
-| --------------- | ------------------------------------------------------------------------------------------------------ |
-| `MATCH`         | The supplied fields agree with an active, issuer-signed ClaimSeal record.                              |
-| `MISMATCH`      | A known record conflicts with supplied fields, is inactive, revoked, expired, or has invalid evidence. |
-| `NOT_PUBLISHED` | No matching ClaimSeal record was found; this is not a safety assessment.                               |
+Request:
+
+```json
+{
+  "url": "https://claimseal.vercel.app/verify",
+  "claimContract": "0x3ed839Ea78e7BFF4c06ED93110987E7083533d6b",
+  "campaignId": "0x..."
+}
+```
+
+`claimContract` and `campaignId` are optional. At least a HTTPS `url` is required.
+
+Response shape:
+
+```json
+{
+  "verdict": "MATCH",
+  "campaign": {
+    "name": "ClaimSeal Testnet Verification Demo",
+    "issuer": "0x...",
+    "chainId": 1952
+  },
+  "checks": [
+    {
+      "field": "canonicalUrl",
+      "status": "match",
+      "expected": "claimseal.vercel.app/verify",
+      "actual": "claimseal.vercel.app/verify"
+    }
+  ]
+}
+```
+
+Example:
+
+```sh
+curl -X POST "https://claimseal.vercel.app/v1/verify-claim-manifest" \
+  -H "content-type: application/json" \
+  -d '{"url":"https://claimseal.vercel.app/verify"}'
+```
+
+## Demo video plan for OKX.AI Genesis
+
+The hackathon asks for an X post using `#OKXAI` with a clear demo or walkthrough up to 90 seconds.
+
+Recommended cut:
+
+| Time   | Scene             | Show                                                                                                        |
+| ------ | ----------------- | ----------------------------------------------------------------------------------------------------------- |
+| 0–10s  | Problem           | Fake claim links and typo domains trick users. Show ClaimSeal hero.                                         |
+| 10–30s | Publisher flow    | Connect wallet, create campaign, sign manifest, anchor on X Layer Testnet. Fast-forward wallet wait/typing. |
+| 30–50s | Good verification | Paste official URL + contract and show `MATCH`.                                                             |
+| 50–70s | Attack demo       | Change typo domain or wrong contract and show `MISMATCH`.                                                   |
+| 70–90s | ASP value         | Show `verify_claim_manifest`, Agent ID `9234`, and explain OKX.AI ASP use.                                  |
+
+## Submission checklist
+
+- [x] Live product deployed on HTTPS.
+- [x] Public social preview image configured: [`public/claimseal-social-banner.png`](./public/claimseal-social-banner.png).
+- [x] X Layer Testnet registry deployed.
+- [x] Issuer dashboard and publish flow built.
+- [x] Public verifier supports `MATCH`, `MISMATCH`, and `NOT_PUBLISHED`.
+- [x] Free OKX.AI A2MCP service endpoint built.
+- [x] ClaimSeal ASP reviewed and listed on OKX.AI.
+- [x] Agent ID available: `9234`.
+- [ ] Record and post 90-second X demo with `#OKXAI`.
+- [ ] Submit the Google Form with ASP details and X post link before July 27, 2026, 23:59 UTC.
 
 ## Local development
 
-### Prerequisites
+### Requirements
 
 - Node.js 22+
-- A browser wallet for issuer testing
-- Testnet-only OKB for the issuer/deployer wallet
-- A public WalletConnect project ID for mobile/QR connections
+- npm
+- Browser wallet for issuer testing
+- X Layer Testnet OKB for deploy/publish transactions
+- WalletConnect project ID for RainbowKit
 
-### Install and configure
+### Setup
 
 ```sh
 npm ci
@@ -94,29 +199,20 @@ npm run contract:compile
 npm run dev
 ```
 
-Set the deployment values in `.env.local`. Never commit `DEPLOYER_PRIVATE_KEY` or a copied `.env` file. Full configuration and deployment steps are in [TESTNET_DEPLOYMENT.md](./TESTNET_DEPLOYMENT.md).
+### Environment
 
-## API
+Copy `.env.example` to `.env.local` and configure:
 
-### `POST /v1/verify-claim-manifest`
-
-```json
-{
-  "url": "https://campaign.example/testnet-claim",
-  "claimContract": "0x0000000000000000000000000000000000000000",
-  "campaignId": "0x..."
-}
+```env
+VITE_WALLETCONNECT_PROJECT_ID=
+VITE_CLAIMSEAL_REGISTRY_ADDRESS=
+VITE_XLAYER_TESTNET_RPC_URL=
+DEPLOYER_PRIVATE_KEY=
 ```
 
-The response contains a verdict and field-level evidence for the normalized URL, contract, EIP-712 signature, active validity window, and X Layer registry anchor.
+Never commit `.env`, `.env.local`, private keys, seed phrases, or real-wallet secrets.
 
-```sh
-curl -X POST "$CLAIMSEAL_BASE_URL/v1/verify-claim-manifest" \
-  -H "content-type: application/json" \
-  -d '{"url":"https://campaign.example/testnet-claim"}'
-```
-
-## Quality checks
+### Quality checks
 
 ```sh
 npm run lint
@@ -124,40 +220,32 @@ npm run contract:compile
 npm run build
 npm run api:smoke
 ```
-
-The CI workflow runs linting, registry compilation, and a production build on every push and pull request.
 
 ## Project structure
 
 ```text
 contracts/                 ClaimSealRegistry Solidity contract
 scripts/                   Compile, deploy, and API smoke scripts
-src/lib/                   Protocol, wallet, registry, and verifier logic
-src/routes/                Public verifier, issuer, and HTTP API routes
-src/components/            Evidence, passport, and shared UI components
-TESTNET_DEPLOYMENT.md      Safe testnet and ASP handoff guide
+src/components/            Passport card, evidence table, header, UI components
+src/lib/                   Protocol, registry, wallet, verifier, API helpers
+src/routes/                Web pages and HTTP API routes
+public/                    ClaimSeal brand and social preview assets
+TESTNET_DEPLOYMENT.md      X Layer deployment and demo guide
 ```
 
-## Build X submission checklist
+## Security boundaries
 
-- [ ] Publish a real, clearly labelled testnet demo campaign.
-- [ ] Test `MATCH`, typo-domain `MISMATCH`, and `NOT_PUBLISHED` end-to-end.
-- [ ] Deploy the web/API service on a public HTTPS domain.
-- [ ] Register ClaimSeal Verify as a free A2MCP ASP and wait for the marketplace listing to be live.
-- [ ] Record an X demo under 90 seconds and include `#OKXAI`.
-- [ ] Submit the live ASP URL and X-post URL through the Build X Google Form.
+ClaimSeal verifies that submitted campaign details match an issuer-signed record. It does not:
 
-## Useful commands
+- audit website code,
+- audit smart contracts,
+- guarantee campaign safety,
+- approve token transfers,
+- custody user funds,
+- ask public verifiers to connect a wallet.
 
-```sh
-npm run dev
-npm run lint
-npm run build
-npm run contract:compile
-npm run contract:deploy:testnet
-npm run api:smoke
-```
+For demos and testing, use dedicated testnet wallets only.
 
-## Security
+## License
 
-Use a dedicated testnet wallet for deployments and demos. Never use real assets, a mainnet wallet, seed phrase, or private key. The project deliberately treats absent registry/RPC configuration as an error rather than returning a made-up verification verdict.
+MIT © 2026 Nikhil Raikwar. See [LICENSE](./LICENSE).

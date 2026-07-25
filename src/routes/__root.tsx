@@ -102,13 +102,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Verify token claim links before connecting a wallet. ClaimSeal checks URL and contract details against an issuer-signed X Layer Testnet record.",
       },
+      { property: "og:url", content: "https://claimseal.vercel.app" },
       { property: "og:type", content: "website" },
+      {
+        property: "og:image",
+        content: "https://claimseal.vercel.app/claimseal-social-banner.png",
+      },
+      { property: "og:image:width", content: "1600" },
+      { property: "og:image:height", content: "900" },
+      {
+        property: "og:image:alt",
+        content: "ClaimSeal - Verify a claim before you connect",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "ClaimSeal - Verify a claim before you connect" },
       {
         name: "twitter:description",
         content:
           "Verify token claim links before connecting a wallet with issuer-signed records on X Layer Testnet.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://claimseal.vercel.app/claimseal-social-banner.png",
+      },
+      {
+        name: "twitter:image:alt",
+        content: "ClaimSeal - Verify a claim before you connect",
       },
     ],
     links: [

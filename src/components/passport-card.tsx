@@ -5,7 +5,7 @@ import { SealStamp } from "./seal-stamp";
 const verdictCopy: Record<Verdict, { title: string; body: string; accent: string; bar: string }> = {
   match: {
     title: "This URL and contract match the active issuer-signed record.",
-    body: "Every checked field aligns with the wallet-signed manifest anchored on X Layer Testnet.",
+    body: "Every checked field aligns with the issuer-signed manifest anchored on X Layer Testnet.",
     accent: "text-emerald-bold",
     bar: "bg-emerald-bold",
   },
@@ -36,7 +36,7 @@ export function PassportCard({
 }) {
   const copy = verdictCopy[verdict];
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-stone-200 bg-white shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)]">
+    <div className="surface-card relative overflow-hidden rounded-[32px]">
       <div className={`h-2 w-full ${copy.bar}`} />
       <div className="grid gap-8 p-5 sm:p-8 md:grid-cols-[minmax(0,1.35fr)_minmax(260px,.85fr)] md:gap-10 md:p-12">
         <div className="space-y-7 sm:space-y-8">
@@ -104,7 +104,7 @@ export function PassportCard({
           </dl>
         </div>
 
-        <div className="relative flex min-h-[190px] items-center justify-center overflow-hidden rounded-3xl bg-cream-100 p-6 sm:min-h-[220px] sm:p-8">
+        <div className="relative flex min-h-[190px] items-center justify-center overflow-hidden rounded-3xl bg-cream-100 p-6 shadow-inner sm:min-h-[220px] sm:p-8">
           <div
             className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden opacity-[0.04]"
             aria-hidden

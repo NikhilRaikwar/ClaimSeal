@@ -6,7 +6,7 @@ import { useAccount, useDisconnect } from "wagmi";
 
 export function SiteHeader() {
   return (
-    <nav className="flex items-center justify-between gap-3 px-4 sm:px-6 md:px-10 py-4 sm:py-6 max-w-7xl mx-auto">
+    <nav className="sticky top-0 z-40 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 backdrop-blur sm:px-6 sm:py-5 md:px-10">
       <Link to="/" className="flex min-w-0 shrink items-center gap-2.5 group">
         <div className="size-9 overflow-hidden rounded-xl rotate-12 bg-ink shadow-lg shadow-emerald-bold/20 transition-transform duration-500 group-hover:rotate-45">
           <img src="/claimseal-mark.svg" alt="" className="size-full" />
@@ -58,8 +58,9 @@ function HeaderWalletAction() {
         if (account) {
           return (
             <details className="relative shrink-0">
-              <summary className="flex cursor-pointer list-none items-center gap-1.5 rounded-full bg-ink px-4 py-2.5 text-sm font-medium text-cream-50 transition-transform hover:scale-105 [&::-webkit-details-marker]:hidden">
-                Dashboard <ChevronDown aria-hidden className="size-4" />
+              <summary className="seal-button cursor-pointer list-none bg-ink px-4 py-2.5 text-sm text-cream-50 shadow-[0_16px_35px_-24px_rgba(28,25,23,0.9)] [&::-webkit-details-marker]:hidden">
+                <span className="hidden sm:inline">Issuer</span> Dashboard{" "}
+                <ChevronDown aria-hidden className="size-4" />
               </summary>
               <div className="absolute right-0 z-50 mt-3 w-72 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 shadow-[0_18px_45px_-22px_rgba(28,25,23,0.35)]">
                 <div className="border-b border-stone-100 px-3 py-3">
@@ -105,7 +106,7 @@ function HeaderWalletAction() {
               openConnectModal();
             }}
             disabled={!mounted}
-            className="shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 bg-ink text-cream-50 rounded-full text-sm font-medium hover:scale-105 transition-transform inline-flex items-center gap-1.5 disabled:opacity-50"
+            className="seal-button shrink-0 whitespace-nowrap bg-ink px-4 py-2.5 text-sm text-cream-50 disabled:opacity-50 sm:px-5"
           >
             Connect wallet
           </button>

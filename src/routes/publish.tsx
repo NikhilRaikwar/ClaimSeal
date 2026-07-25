@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { CheckCircle2, FileSignature, Network, Wallet } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAccount, useChainId } from "wagmi";
 import { SiteFooter } from "@/components/site-footer";
@@ -117,10 +118,16 @@ function PublishPage() {
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-16 sm:pb-24">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
-          Issuer flow
-        </p>
-        <h1 className="font-display text-4xl md:text-5xl mb-10">Publish a campaign</h1>
+        <div className="mb-10 rounded-[32px] bg-ink p-6 text-cream-50 sm:p-8 md:p-10">
+          <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-2">
+            Issuer flow
+          </p>
+          <h1 className="font-display text-4xl md:text-5xl">Publish a campaign</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-stone-400">
+            Sign a campaign manifest, anchor it on X Layer Testnet, and give users a public
+            verification link before they connect wallets.
+          </p>
+        </div>
 
         <div className="flex items-center gap-3 mb-10 overflow-x-auto pb-2">
           {steps.map((item, index) => (
@@ -144,7 +151,7 @@ function PublishPage() {
           ))}
         </div>
 
-        <section className="bg-white rounded-[28px] border border-stone-200 p-5 sm:p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.15)] animate-fade-up">
+        <section className="surface-card rounded-[28px] p-5 animate-fade-up sm:p-8 md:p-12">
           {error && (
             <div className="mb-6 p-4 rounded-2xl bg-coral-soft border border-coral-bold/25 text-coral-deep text-sm">
               {error}
@@ -154,6 +161,9 @@ function PublishPage() {
           {step === 1 && (
             <div className="space-y-6">
               <div>
+                <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-emerald-soft text-emerald-bold">
+                  <Wallet aria-hidden className="size-6" />
+                </div>
                 <h2 className="font-display text-2xl mb-2">Connect your issuer wallet</h2>
                 <p className="text-stone-600">
                   Your browser wallet signs the manifest. ClaimSeal never receives a private key and
@@ -166,7 +176,7 @@ function PublishPage() {
                     type="button"
                     onClick={openConnectModal}
                     disabled={!mounted || busy}
-                    className="w-full sm:w-auto p-5 bg-cream-100 rounded-2xl border border-stone-200 text-left hover:border-ink transition-colors disabled:opacity-60"
+                    className="w-full rounded-2xl border border-stone-200 bg-cream-100 p-5 text-left transition-colors hover:border-emerald-bold disabled:opacity-60 sm:w-auto"
                   >
                     <div className="font-display text-lg mb-1">Connect with RainbowKit</div>
                     <div className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
@@ -181,6 +191,9 @@ function PublishPage() {
           {step === 2 && (
             <div className="space-y-6">
               <div>
+                <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-amber-soft text-amber-bold">
+                  <Network aria-hidden className="size-6" />
+                </div>
                 <h2 className="font-display text-2xl mb-2">Network check</h2>
                 <p className="text-stone-600">
                   Campaign records are anchored on X Layer Testnet (chain 1952).
@@ -209,14 +222,14 @@ function PublishPage() {
                   <button
                     onClick={switchNetwork}
                     disabled={busy}
-                    className="w-full sm:w-auto px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
+                    className="seal-button w-full bg-ink px-6 py-3 text-cream-50 disabled:opacity-60 sm:w-auto"
                   >
                     {busy ? "Waiting for wallet..." : "Switch to X Layer Testnet"}
                   </button>
                 ) : (
                   <button
                     onClick={() => setStep(3)}
-                    className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform"
+                    className="seal-button w-full bg-emerald-bold px-6 py-3 text-white sm:w-auto"
                   >
                     Continue <span aria-hidden>&rarr;</span>
                   </button>
@@ -228,6 +241,9 @@ function PublishPage() {
           {step === 3 && (
             <div className="space-y-6">
               <div>
+                <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-emerald-soft text-emerald-bold">
+                  <FileSignature aria-hidden className="size-6" />
+                </div>
                 <h2 className="font-display text-2xl mb-2">Campaign details</h2>
                 <p className="text-stone-600">
                   These fields are signed by your wallet and compared during every verification.
@@ -239,7 +255,7 @@ function PublishPage() {
                     value={form.name}
                     onChange={(event) => setForm({ ...form, name: event.target.value })}
                     placeholder="Testnet token claim"
-                    className="input"
+                    className="seal-input"
                   />
                 </Field>
                 <Field label="Official campaign URL">
@@ -247,7 +263,7 @@ function PublishPage() {
                     value={form.url}
                     onChange={(event) => setForm({ ...form, url: event.target.value })}
                     placeholder="https://claim.example.com/claim"
-                    className="input font-mono text-sm"
+                    className="seal-input font-mono text-sm"
                   />
                 </Field>
                 <Field label="Claim contract address">
@@ -255,7 +271,7 @@ function PublishPage() {
                     value={form.contract}
                     onChange={(event) => setForm({ ...form, contract: event.target.value })}
                     placeholder="0x..."
-                    className="input font-mono text-sm"
+                    className="seal-input font-mono text-sm"
                   />
                 </Field>
                 <div className="grid sm:grid-cols-2 gap-5">
@@ -264,7 +280,7 @@ function PublishPage() {
                       type="date"
                       value={form.validFrom}
                       onChange={(event) => setForm({ ...form, validFrom: event.target.value })}
-                      className="input"
+                      className="seal-input"
                     />
                   </Field>
                   <Field label="Valid until (UTC)">
@@ -272,7 +288,7 @@ function PublishPage() {
                       type="date"
                       value={form.validUntil}
                       onChange={(event) => setForm({ ...form, validUntil: event.target.value })}
-                      className="input"
+                      className="seal-input"
                     />
                   </Field>
                 </div>
@@ -282,7 +298,7 @@ function PublishPage() {
                 disabled={
                   !form.name || !form.url || !form.contract || !form.validFrom || !form.validUntil
                 }
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-40"
+                className="seal-button w-full bg-ink px-6 py-3 text-cream-50 sm:w-auto"
               >
                 Review <span aria-hidden>&rarr;</span>
               </button>
@@ -292,6 +308,9 @@ function PublishPage() {
           {step === 4 && (
             <div className="space-y-6">
               <div>
+                <div className="mb-4 flex size-12 items-center justify-center rounded-2xl bg-emerald-soft text-emerald-bold">
+                  <CheckCircle2 aria-hidden className="size-6" />
+                </div>
                 <h2 className="font-display text-2xl mb-2">Review & sign</h2>
                 <p className="text-stone-600">
                   First your wallet signs the EIP-712 manifest, then it sends the registry
@@ -321,14 +340,14 @@ function PublishPage() {
                 <button
                   onClick={signAndPublish}
                   disabled={busy}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
+                  className="seal-button w-full bg-emerald-bold px-6 py-3 text-white disabled:opacity-60 sm:w-auto"
                 >
                   {busy ? "Waiting for wallet and testnet..." : "Sign EIP-712 & anchor"}
                 </button>
                 <button
                   onClick={() => setStep(3)}
                   disabled={busy}
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-stone-200 font-medium hover:border-ink transition-colors disabled:opacity-60"
+                  className="seal-button w-full border border-stone-200 bg-white px-6 py-3 disabled:opacity-60 sm:w-auto"
                 >
                   Back
                 </button>
@@ -349,7 +368,6 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
         {label}
       </span>
       {children}
-      <style>{`.input { width: 100%; background: var(--cream-100); border-radius: 1rem; padding: .9rem 1.1rem; border: 1px solid transparent; outline: none; } .input:focus { border-color: var(--emerald-bold); background: white; }`}</style>
     </label>
   );
 }

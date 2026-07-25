@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { FileSignature, Plus, ShieldCheck } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 import { z } from "zod";
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Issuer dashboard - ClaimSeal" },
-      { name: "description", content: "Your published wallet-signed ClaimSeal campaigns." },
+      { name: "description", content: "Your published issuer-signed ClaimSeal campaigns." },
     ],
   }),
   component: Dashboard,
@@ -93,22 +94,28 @@ function Dashboard() {
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-16 sm:pb-24">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
-              Issuer dashboard
-            </p>
-            <h1 className="font-display text-4xl md:text-5xl">Your campaigns</h1>
-          </div>
-          <div className="flex items-center flex-wrap gap-3">
-            {issuer && (
-              <Link
-                to="/publish"
-                className="px-5 py-2.5 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform"
-              >
-                New campaign +
-              </Link>
-            )}
+        <div className="mb-10 rounded-[32px] bg-ink p-6 text-cream-50 shadow-[0_22px_70px_-45px_rgba(28,25,23,0.65)] sm:p-8 md:p-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-2">
+                Issuer dashboard
+              </p>
+              <h1 className="font-display text-4xl md:text-5xl">Your campaigns</h1>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-400">
+                Manage issuer-signed manifests, test public verification links, and prove campaign
+                authenticity before users connect wallets.
+              </p>
+            </div>
+            <div className="flex items-center flex-wrap gap-3">
+              {issuer && (
+                <Link
+                  to="/publish"
+                  className="seal-button bg-emerald-bold px-5 py-3 text-sm text-white"
+                >
+                  New campaign <Plus aria-hidden className="size-4" />
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
@@ -126,19 +133,22 @@ function Dashboard() {
               <Stat label="Inactive" value={stats.inactive} tone="text-coral-bold" />
             </div>
             {loading && (
-              <div className="p-10 text-center font-mono text-sm text-stone-500">
+              <div className="surface-card rounded-[28px] p-10 text-center font-mono text-sm text-stone-500">
                 Reading X Layer Testnet records...
               </div>
             )}
             {!loading && !error && campaigns.length === 0 && (
-              <section className="bg-white rounded-[28px] border border-stone-200 p-6 sm:p-10 text-center">
+              <section className="surface-card rounded-[28px] p-6 text-center sm:p-10">
+                <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-emerald-soft text-emerald-bold">
+                  <FileSignature aria-hidden className="size-7" />
+                </div>
                 <h2 className="font-display text-2xl">No published campaigns for this issuer.</h2>
                 <p className="text-stone-600 mt-3">
                   Publish your first signed manifest to create a public verification record.
                 </p>
                 <Link
                   to="/publish"
-                  className="inline-flex mt-6 px-5 py-2.5 rounded-full bg-emerald-bold text-white text-sm font-medium"
+                  className="seal-button mt-6 bg-emerald-bold px-5 py-2.5 text-sm text-white"
                 >
                   Publish a campaign
                 </Link>
@@ -153,7 +163,7 @@ function Dashboard() {
                     key={campaign.campaignId}
                     to="/campaign/$id"
                     params={{ id: campaign.campaignId }}
-                    className="group bg-white rounded-3xl border border-stone-200 p-6 hover:border-ink hover:-translate-y-0.5 transition-all"
+                    className="group surface-card rounded-3xl p-6 hover:-translate-y-1 hover:border-emerald-bold/45 transition-all"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
@@ -181,7 +191,7 @@ function Dashboard() {
                         </b>
                       </span>
                     </div>
-                    <div className="mt-5 flex items-center gap-2 text-sm font-medium text-emerald-deep">
+                    <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-soft px-3 py-1.5 text-sm font-bold text-emerald-deep">
                       View campaign record{" "}
                       <span
                         aria-hidden
@@ -205,7 +215,7 @@ function Dashboard() {
 
 function Stat({ label, value, tone }: { label: string; value: number; tone: string }) {
   return (
-    <div className="bg-white rounded-2xl border border-stone-200 p-5">
+    <div className="surface-card rounded-2xl p-5">
       <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">{label}</p>
       <p className={`font-display text-3xl mt-2 ${tone}`}>{value}</p>
     </div>
@@ -220,7 +230,10 @@ function dateLabel(value: string) {
 
 function IssuerAccess({ loading }: { loading: boolean }) {
   return (
-    <section className="mx-auto max-w-xl rounded-[28px] border border-stone-200 bg-white p-8 text-center shadow-[0_20px_60px_-35px_rgba(28,25,23,0.24)] sm:p-12">
+    <section className="surface-card mx-auto max-w-xl rounded-[28px] p-8 text-center sm:p-12">
+      <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl bg-emerald-soft text-emerald-bold">
+        <ShieldCheck aria-hidden className="size-7" />
+      </div>
       <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold">
         Issuer access
       </p>
@@ -234,7 +247,7 @@ function IssuerAccess({ loading }: { loading: boolean }) {
             type="button"
             onClick={openConnectModal}
             disabled={!mounted || loading}
-            className="mt-7 rounded-full bg-emerald-bold px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02] disabled:opacity-50"
+            className="seal-button mt-7 bg-emerald-bold px-6 py-3 text-sm text-white disabled:opacity-50"
           >
             {loading ? "Checking wallet..." : "Connect wallet"}
           </button>

@@ -117,7 +117,7 @@ function CampaignPage() {
                 {error}
               </div>
             )}
-            <section className="bg-white rounded-[32px] border border-stone-200 p-5 sm:p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
+            <section className="surface-card rounded-[32px] p-5 animate-fade-up sm:p-8 md:p-12">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
@@ -185,19 +185,19 @@ function CampaignPage() {
                   <Link
                     to="/verify"
                     search={{ url: officialUrl, contract: campaign.claimContract }}
-                    className="inline-flex w-full justify-center px-5 py-3 rounded-full bg-emerald-bold text-white text-sm font-medium sm:w-auto"
+                    className="seal-button w-full bg-emerald-bold px-5 py-3 text-sm text-white sm:w-auto"
                   >
                     Open verification
                   </Link>
                   <button
                     onClick={copyVerificationLink}
-                    className="w-full px-5 py-3 rounded-full bg-white/10 text-white text-sm font-medium border border-white/10 sm:w-auto"
+                    className="seal-button w-full border border-white/10 bg-white/10 px-5 py-3 text-sm text-white sm:w-auto"
                   >
                     {copied ? "Copied" : "Copy link"}
                   </button>
                 </div>
               </div>
-              <div className="bg-white rounded-3xl p-5 sm:p-8 border border-stone-200">
+              <div className="surface-card rounded-3xl p-5 sm:p-8">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
                   Issuer controls
                 </p>
@@ -213,7 +213,7 @@ function CampaignPage() {
                           type="button"
                           onClick={openConnectModal}
                           disabled={!mounted}
-                          className="mt-4 px-5 py-2.5 rounded-full bg-ink text-cream-50 text-sm font-medium disabled:opacity-60"
+                          className="seal-button mt-4 bg-ink px-5 py-2.5 text-sm text-cream-50 disabled:opacity-60"
                         >
                           Connect issuer wallet
                         </button>
@@ -229,7 +229,7 @@ function CampaignPage() {
                 {ownCampaign && campaign.status !== "revoked" && !confirming && (
                   <button
                     onClick={() => setConfirming(true)}
-                    className="mt-5 px-5 py-2.5 rounded-full border border-coral-bold text-coral-bold text-sm font-medium hover:bg-coral-soft"
+                    className="seal-button mt-5 border border-coral-bold px-5 py-2.5 text-sm text-coral-bold hover:bg-coral-soft"
                   >
                     Revoke campaign
                   </button>
@@ -246,14 +246,14 @@ function CampaignPage() {
                       <button
                         onClick={revoke}
                         disabled={busy}
-                        className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-coral-bold text-white text-sm font-medium disabled:opacity-60"
+                        className="seal-button w-full bg-coral-bold px-4 py-2.5 text-sm text-white disabled:opacity-60 sm:w-auto"
                       >
                         {busy ? "Waiting for wallet..." : "Confirm revoke"}
                       </button>
                       <button
                         onClick={() => setConfirming(false)}
                         disabled={busy}
-                        className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-white border border-stone-200 text-sm font-medium"
+                        className="seal-button w-full border border-stone-200 bg-white px-4 py-2.5 text-sm sm:w-auto"
                       >
                         Cancel
                       </button>
