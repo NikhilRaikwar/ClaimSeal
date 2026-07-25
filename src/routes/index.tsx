@@ -24,9 +24,15 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   const navigate = useNavigate();
+  const { address, isConnected, status } = useAccount();
   const [url, setUrl] = useState("");
   const [contract, setContract] = useState("");
   const validUrl = /^https:\/\/[^\s]+\.[^\s]+/.test(url.trim());
+
+  useEffect(() => {
+    if (status === "connecting" || status === "reconnecting" || !isConnected || !address) return;
+    navigate({ to: "/dashboard", search: { issuer: address }, replace: true });
+  }, [address, isConnected, navigate, status]);
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -60,7 +66,10 @@ function Landing() {
           </p>
         </header>
 
-        <section className="max-w-3xl mx-auto px-4 sm:px-6 animate-fade-up stagger-2">
+        <section
+          id="verify"
+          className="max-w-3xl mx-auto px-4 sm:px-6 scroll-mt-8 animate-fade-up stagger-2"
+        >
           <form
             onSubmit={submit}
             className="bg-white rounded-[28px] border border-stone-200 p-6 md:p-8 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)]"
@@ -169,7 +178,7 @@ function Landing() {
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32">
+        <section id="issuers" className="max-w-7xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32 scroll-mt-8">
           <div className="bg-ink rounded-[32px] sm:rounded-[40px] p-7 sm:p-12 md:p-20 text-cream-50 relative overflow-hidden">
             <div className="relative z-10 max-w-lg">
               <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-4">
@@ -182,7 +191,9 @@ function Landing() {
                 Connect once, sign your manifest, and anchor a verifiable record. The issuer wallet
                 can revoke it at any time.
               </p>
-              <IssuerConnectCallToAction />
+              <div className="flex justify-center">
+                <IssuerConnectCallToAction />
+              </div>
             </div>
             <div className="absolute -right-32 -bottom-32 size-[500px] bg-emerald-bold/10 rounded-full blur-3xl" />
           </div>
@@ -194,41 +205,17 @@ function Landing() {
 }
 
 function IssuerConnectCallToAction() {
-  const navigate = useNavigate();
-  const { address, isConnected } = useAccount();
-  const [connectIntent, setConnectIntent] = useState(false);
-
-  useEffect(() => {
-    if (!connectIntent || !isConnected || !address) return;
-    window.localStorage.setItem("claimseal-issuer", address);
-    navigate({ to: "/dashboard", search: { issuer: address } });
-  }, [address, connectIntent, isConnected, navigate]);
-
   return (
     <ConnectButton.Custom>
-      {({ account, mounted, openConnectModal }) => {
-        if (account) {
-          return (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/dashboard", search: { issuer: account.address } })}
-              className="px-8 py-4 bg-emerald-bold text-white rounded-full font-display text-lg inline-flex items-center gap-2 hover:scale-105 transition-transform"
-            >
-              Open issuer dashboard <span aria-hidden>&rarr;</span>
-            </button>
-          );
-        }
+      {({ mounted, openConnectModal }) => {
         return (
           <button
             type="button"
             disabled={!mounted}
-            onClick={() => {
-              setConnectIntent(true);
-              openConnectModal();
-            }}
+            onClick={openConnectModal}
             className="px-8 py-4 bg-emerald-bold text-white rounded-full font-display text-lg inline-flex items-center gap-2 hover:scale-105 transition-transform disabled:opacity-50"
           >
-            Connect issuer wallet <span aria-hidden>&rarr;</span>
+            Connect wallet <span aria-hidden>&rarr;</span>
           </button>
         );
       }}

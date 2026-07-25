@@ -2,7 +2,7 @@ import { defineChain, isAddress, type Address } from "viem";
 
 export const XLAYER_TESTNET_CHAIN_ID = 1952;
 export const DEFAULT_XLAYER_TESTNET_RPC = "https://testrpc.xlayer.tech/terigon";
-export const XLAYER_TESTNET_EXPLORER = "https://www.okx.com/web3/explorer/xlayer-test";
+export const XLAYER_TESTNET_EXPLORER = "https://www.oklink.com/x-layer-testnet";
 
 export const xLayerTestnet = defineChain({
   id: XLAYER_TESTNET_CHAIN_ID,
@@ -14,7 +14,7 @@ export const xLayerTestnet = defineChain({
     },
   },
   blockExplorers: {
-    default: { name: "OKX Explorer", url: XLAYER_TESTNET_EXPLORER },
+    default: { name: "OKLink Explorer", url: XLAYER_TESTNET_EXPLORER },
   },
   testnet: true,
 });

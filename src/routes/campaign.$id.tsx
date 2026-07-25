@@ -143,7 +143,7 @@ function CampaignPage() {
                 </span>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-6 mt-10 pt-8 border-t border-stone-100">
+              <div className="grid gap-4 border-t border-stone-100 pt-8 sm:grid-cols-2 lg:gap-5">
                 <Detail label="Issuer" value={campaign.issuer} mono />
                 <Detail
                   label="Claim contract"
@@ -287,19 +287,20 @@ function Detail({
   href?: string;
 }) {
   return (
-    <div>
+    <div className="rounded-2xl bg-cream-100/70 px-4 py-3">
       <dt className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
         {label}
       </dt>
-      <dd className={`${mono ? "font-mono text-xs break-all" : "text-sm"}`}>
+      <dd className={`${mono ? "font-mono text-xs leading-relaxed break-all" : "text-sm"}`}>
         {href ? (
           <a
             href={href}
             target="_blank"
             rel="noreferrer"
-            className="hover:underline text-emerald-deep"
+            className="inline-flex max-w-full items-start gap-1 text-emerald-deep hover:underline"
           >
-            <ArrowUpRight aria-hidden className="inline-block size-3.5 align-[-0.15em]" />
+            <span className="break-all">{value}</span>
+            <ArrowUpRight aria-hidden className="mt-0.5 size-3.5 shrink-0" />
           </a>
         ) : (
           value

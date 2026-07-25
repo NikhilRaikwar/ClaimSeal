@@ -38,22 +38,22 @@ export function PassportCard({
   return (
     <div className="relative overflow-hidden rounded-[32px] border border-stone-200 bg-white shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)]">
       <div className={`h-2 w-full ${copy.bar}`} />
-      <div className="grid gap-8 p-5 sm:p-8 md:grid-cols-[1.6fr_1fr] md:gap-10 md:p-12">
-        <div className="space-y-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="grid gap-8 p-5 sm:p-8 md:grid-cols-[minmax(0,1.35fr)_minmax(260px,.85fr)] md:gap-10 md:p-12">
+        <div className="space-y-7 sm:space-y-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-1">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
                 ClaimSeal / Campaign Record
               </p>
-              <p className="font-display text-2xl break-words">
+              <p className="max-w-2xl break-words font-display text-2xl leading-tight sm:text-3xl">
                 {campaign?.name ?? "Unknown campaign"}
               </p>
             </div>
-            <div className="space-y-1 sm:text-right">
+            <div className="shrink-0 rounded-2xl border border-stone-200 bg-cream-100 px-4 py-3 sm:text-right">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
                 Chain
               </p>
-              <p className="font-mono text-xs">X Layer Testnet &middot; 1952</p>
+              <p className="mt-1 font-mono text-xs text-stone-700">X Layer Testnet &middot; 1952</p>
             </div>
           </div>
 
@@ -64,26 +64,40 @@ export function PassportCard({
             <p className="max-w-lg leading-relaxed text-stone-600">{copy.body}</p>
           </div>
 
-          <dl className="grid grid-cols-1 gap-4 border-t border-stone-100 pt-4 sm:grid-cols-2">
-            <div>
+          <dl className="grid grid-cols-1 gap-3 border-t border-stone-100 pt-5 sm:grid-cols-2">
+            <div className="rounded-2xl bg-cream-100/70 px-4 py-3">
               <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Checked URL
               </dt>
-              <dd className="break-all font-mono text-xs">{checkedUrl ?? "-"}</dd>
+              <dd className="break-all font-mono text-[11px] leading-relaxed text-stone-700">
+                {checkedUrl ?? "-"}
+              </dd>
             </div>
-            <div>
+            <div className="rounded-2xl bg-cream-100/70 px-4 py-3">
               <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Issuer
               </dt>
-              <dd className="break-all font-mono text-xs">{campaign?.issuer ?? "-"}</dd>
+              <dd className="break-all font-mono text-[11px] leading-relaxed text-stone-700">
+                {campaign?.issuer ?? "-"}
+              </dd>
             </div>
-            {campaign?.validUntil && (
-              <div className="sm:col-span-2">
+            {campaign?.validFrom && (
+              <div className="rounded-2xl bg-cream-100/70 px-4 py-3">
                 <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
-                  Valid
+                  Valid from
                 </dt>
-                <dd className="font-mono text-xs">
-                  {campaign.validFrom} &rarr; {campaign.validUntil}
+                <dd className="font-mono text-[11px] leading-relaxed text-stone-700">
+                  {formatDate(campaign.validFrom)}
+                </dd>
+              </div>
+            )}
+            {campaign?.validUntil && (
+              <div className="rounded-2xl bg-cream-100/70 px-4 py-3">
+                <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
+                  Valid until
+                </dt>
+                <dd className="font-mono text-[11px] leading-relaxed text-stone-700">
+                  {formatDate(campaign.validUntil)}
                 </dd>
               </div>
             )}
@@ -105,4 +119,12 @@ export function PassportCard({
       {children}
     </div>
   );
+}
+
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "UTC",
+  }).format(new Date(value));
 }

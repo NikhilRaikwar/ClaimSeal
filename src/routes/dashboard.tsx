@@ -1,3 +1,4 @@
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
@@ -46,7 +47,8 @@ function Dashboard() {
       return;
     }
     setIssuer(undefined);
-    navigate({ to: "/", replace: true });
+    setCampaigns([]);
+    setLoading(false);
   }, [address, isConnected, navigate, searchIssuer, status]);
 
   useEffect(() => {
@@ -100,16 +102,13 @@ function Dashboard() {
           </div>
           <div className="flex items-center flex-wrap gap-3">
             {issuer && (
-              <div className="px-4 py-2.5 bg-white border border-stone-200 rounded-full font-mono text-xs">
-                {short(issuer)}
-              </div>
+              <Link
+                to="/publish"
+                className="px-5 py-2.5 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform"
+              >
+                New campaign +
+              </Link>
             )}
-            <Link
-              to="/publish"
-              className="px-5 py-2.5 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform"
-            >
-              New campaign +
-            </Link>
           </div>
         </div>
 
@@ -146,18 +145,20 @@ function Dashboard() {
               </section>
             )}
             {!loading && campaigns.length > 0 && (
-              <section className="grid md:grid-cols-2 gap-5">
+              <section
+                className={`grid gap-5 ${campaigns.length === 1 ? "max-w-3xl" : "lg:grid-cols-2"}`}
+              >
                 {campaigns.map((campaign) => (
                   <Link
                     key={campaign.campaignId}
                     to="/campaign/$id"
                     params={{ id: campaign.campaignId }}
-                    className="bg-white rounded-3xl border border-stone-200 p-6 hover:border-ink hover:-translate-y-0.5 transition-all"
+                    className="group bg-white rounded-3xl border border-stone-200 p-6 hover:border-ink hover:-translate-y-0.5 transition-all"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="font-display text-xl">{campaign.name}</p>
-                        <p className="font-mono text-xs text-stone-500 mt-2 truncate max-w-[18rem]">
+                        <p className="font-mono text-xs text-stone-500 mt-2 truncate max-w-[28rem]">
                           {campaign.canonicalHost}
                           {campaign.pathRule || "/"}
                         </p>
@@ -180,12 +181,22 @@ function Dashboard() {
                         </b>
                       </span>
                     </div>
+                    <div className="mt-5 flex items-center gap-2 text-sm font-medium text-emerald-deep">
+                      View campaign record{" "}
+                      <span
+                        aria-hidden
+                        className="transition-transform group-hover:translate-x-0.5"
+                      >
+                        &rarr;
+                      </span>
+                    </div>
                   </Link>
                 ))}
               </section>
             )}
           </>
         )}
+        {!issuer && <IssuerAccess loading={status === "connecting" || status === "reconnecting"} />}
       </main>
       <SiteFooter />
     </div>
@@ -201,12 +212,34 @@ function Stat({ label, value, tone }: { label: string; value: number; tone: stri
   );
 }
 
-function short(value: string) {
-  return `${value.slice(0, 6)}...${value.slice(-4)}`;
-}
-
 function dateLabel(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(
     new Date(value),
+  );
+}
+
+function IssuerAccess({ loading }: { loading: boolean }) {
+  return (
+    <section className="mx-auto max-w-xl rounded-[28px] border border-stone-200 bg-white p-8 text-center shadow-[0_20px_60px_-35px_rgba(28,25,23,0.24)] sm:p-12">
+      <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold">
+        Issuer access
+      </p>
+      <h2 className="mt-3 font-display text-3xl">Connect a wallet to view campaigns.</h2>
+      <p className="mt-3 text-sm leading-relaxed text-stone-600">
+        Your dashboard only shows records published by the wallet you connect.
+      </p>
+      <ConnectButton.Custom>
+        {({ mounted, openConnectModal }) => (
+          <button
+            type="button"
+            onClick={openConnectModal}
+            disabled={!mounted || loading}
+            className="mt-7 rounded-full bg-emerald-bold px-6 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.02] disabled:opacity-50"
+          >
+            {loading ? "Checking wallet..." : "Connect wallet"}
+          </button>
+        )}
+      </ConnectButton.Custom>
+    </section>
   );
 }
