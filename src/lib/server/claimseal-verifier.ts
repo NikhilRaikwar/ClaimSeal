@@ -30,6 +30,12 @@ const publishedEvent = parseAbiItem(
   "event ManifestPublished(bytes32 indexed campaignId, address indexed issuer, bytes32 manifestHash, uint64 validFrom, uint64 validUntil, uint64 revision)",
 );
 
+// X Layer's public testnet RPC accepts at most 100 blocks per `eth_getLogs`
+// request. Keep the range inclusive (100 blocks) and issue a small number of
+// requests concurrently so issuer dashboards remain responsive.
+const MAX_LOG_BLOCKS_PER_REQUEST = 100n;
+const LOG_QUERY_CONCURRENCY = 20;
+
 export type VerificationVerdict = "MATCH" | "MISMATCH" | "NOT_PUBLISHED";
 
 export type VerificationCheck = {
@@ -144,16 +150,44 @@ async function readRecord(
 
 async function campaignIdsFromEvents(config: RegistryConfig, issuer?: Address): Promise<Hex[]> {
   const client = getClient(config);
-  const logs = await client.getLogs({
-    address: config.address,
-    event: publishedEvent,
-    args: issuer ? { issuer } : undefined,
-    fromBlock: config.deploymentBlock,
-    toBlock: "latest",
-  });
-  return [
-    ...new Set(logs.map((log) => log.args.campaignId).filter((id): id is Hex => Boolean(id))),
-  ];
+  const latestBlock = await client.getBlockNumber();
+  if (latestBlock < config.deploymentBlock) return [];
+
+  const ranges: Array<{ fromBlock: bigint; toBlock: bigint }> = [];
+  for (
+    let fromBlock = config.deploymentBlock;
+    fromBlock <= latestBlock;
+    fromBlock += MAX_LOG_BLOCKS_PER_REQUEST
+  ) {
+    const toBlock =
+      fromBlock + MAX_LOG_BLOCKS_PER_REQUEST - 1n > latestBlock
+        ? latestBlock
+        : fromBlock + MAX_LOG_BLOCKS_PER_REQUEST - 1n;
+    ranges.push({ fromBlock, toBlock });
+  }
+
+  const campaignIds = new Set<Hex>();
+  for (let start = 0; start < ranges.length; start += LOG_QUERY_CONCURRENCY) {
+    const logsByRange = await Promise.all(
+      ranges.slice(start, start + LOG_QUERY_CONCURRENCY).map(({ fromBlock, toBlock }) =>
+        client.getLogs({
+          address: config.address,
+          event: publishedEvent,
+          args: issuer ? { issuer } : undefined,
+          fromBlock,
+          toBlock,
+        }),
+      ),
+    );
+
+    for (const logs of logsByRange) {
+      for (const log of logs) {
+        if (log.args.campaignId) campaignIds.add(log.args.campaignId);
+      }
+    }
+  }
+
+  return [...campaignIds];
 }
 
 async function candidatesForRequest(
