@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import { EvidenceTable, type EvidenceRow } from "@/components/evidence-table";
@@ -87,7 +88,7 @@ function VerifyPage() {
   return (
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
-      <main className="max-w-5xl mx-auto px-6 pt-4 pb-24">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-4 pb-16 sm:pb-24">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-ink transition-colors mb-6"
@@ -108,7 +109,7 @@ function VerifyPage() {
             </div>
 
             <section className="mt-10 animate-fade-up stagger-2">
-              <div className="flex items-end justify-between mb-4 gap-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-4">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
                     Evidence
@@ -117,7 +118,7 @@ function VerifyPage() {
                 </div>
                 <button
                   onClick={copyLink}
-                  className="text-xs font-medium text-stone-600 hover:text-emerald-bold transition-colors"
+                  className="self-start text-xs font-medium text-stone-600 hover:text-emerald-bold transition-colors sm:self-auto"
                 >
                   {copied ? "Copied" : "Copy verification link"}
                 </button>
@@ -125,20 +126,20 @@ function VerifyPage() {
               <EvidenceTable rows={rows} verdict={toUiVerdict(result.verdict)} />
             </section>
 
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
               {result.campaign && (
                 <a
                   href={`${XLAYER_TESTNET_EXPLORER}/address/${result.campaign.registryAddress}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-5 py-3 rounded-full bg-white border border-stone-200 text-sm font-medium hover:border-ink transition-colors"
+                  className="inline-flex w-full items-center justify-center gap-1.5 px-5 py-3 rounded-full bg-white border border-stone-200 text-sm font-medium hover:border-ink transition-colors sm:w-auto"
                 >
-                  View registry on testnet <span aria-hidden>&nearr;</span>
+                  View registry on testnet <ArrowUpRight aria-hidden className="size-4 shrink-0" />
                 </a>
               )}
               <button
                 onClick={copyLink}
-                className="px-5 py-3 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform"
+                className="inline-flex w-full items-center justify-center px-5 py-3 rounded-full bg-ink text-cream-50 text-sm font-medium hover:scale-[1.02] transition-transform sm:w-auto"
               >
                 {copied ? "Link copied" : "Share result"}
               </button>
@@ -157,7 +158,7 @@ function VerifyPage() {
 
 function LoadingResult({ url }: { url: string }) {
   return (
-    <div className="bg-white rounded-[32px] border border-stone-200 p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)] animate-fade-up">
+    <div className="bg-white rounded-[32px] border border-stone-200 p-6 sm:p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)] animate-fade-up">
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
         ClaimSeal / Verifying
       </p>
@@ -174,7 +175,7 @@ function LoadingResult({ url }: { url: string }) {
 
 function ErrorResult({ error }: { error: string }) {
   return (
-    <div className="bg-white rounded-[32px] border border-coral-bold/30 p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
+    <div className="bg-white rounded-[32px] border border-coral-bold/30 p-6 sm:p-10 md:p-14 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
       <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-coral-bold">
         Verification unavailable
       </p>

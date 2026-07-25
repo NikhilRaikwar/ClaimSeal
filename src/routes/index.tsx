@@ -41,12 +41,12 @@ function Landing() {
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
       <main>
-        <header className="max-w-5xl mx-auto text-center pt-16 md:pt-24 pb-16 px-6 animate-fade-up">
+        <header className="max-w-5xl mx-auto text-center pt-12 sm:pt-16 md:pt-24 pb-12 sm:pb-16 px-4 sm:px-6 animate-fade-up">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white border border-stone-200 rounded-full text-xs font-medium uppercase tracking-widest text-stone-500 mb-8">
             <span className="size-1.5 rounded-full bg-emerald-bold animate-pulse" />X Layer Testnet
             - public verifier
           </span>
-          <h1 className="font-display font-bold text-5xl md:text-7xl leading-[1.02] mb-6 tracking-tight">
+          <h1 className="font-display font-bold text-4xl sm:text-5xl md:text-7xl leading-[1.02] mb-6 tracking-tight">
             Verify a claim <br />
             before you{" "}
             <span className="italic text-emerald-bold underline decoration-[6px] decoration-emerald-bold/20 underline-offset-8">
@@ -54,13 +54,13 @@ function Landing() {
             </span>
             .
           </h1>
-          <p className="text-lg text-stone-600 max-w-xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-stone-600 max-w-xl mx-auto leading-relaxed">
             A wallet-signed record for campaign URLs and contracts. Paste a link to get a clear
             MATCH, MISMATCH, or NOT PUBLISHED verdict.
           </p>
         </header>
 
-        <section className="max-w-3xl mx-auto px-6 animate-fade-up stagger-2">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 animate-fade-up stagger-2">
           <form
             onSubmit={submit}
             className="bg-white rounded-[28px] border border-stone-200 p-6 md:p-8 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)]"
@@ -105,7 +105,7 @@ function Landing() {
               <button
                 type="submit"
                 disabled={!validUrl}
-                className="px-6 py-3.5 bg-ink text-cream-50 rounded-full font-display text-base hover:scale-[1.02] transition-transform disabled:opacity-40 disabled:hover:scale-100"
+                className="w-full sm:w-auto px-6 py-3.5 bg-ink text-cream-50 rounded-full font-display text-base hover:scale-[1.02] transition-transform disabled:opacity-40 disabled:hover:scale-100"
               >
                 Verify campaign <span aria-hidden>&rarr;</span>
               </button>
@@ -116,7 +116,7 @@ function Landing() {
           </form>
         </section>
 
-        <section className="max-w-5xl mx-auto px-6 mt-24 animate-fade-up stagger-3">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mt-16 sm:mt-24 animate-fade-up stagger-3">
           <div className="text-center mb-10">
             <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
               One verdict. Never ambiguous.
@@ -145,7 +145,7 @@ function Landing() {
           </div>
         </section>
 
-        <section id="how" className="max-w-5xl mx-auto px-6 mt-32">
+        <section id="how" className="max-w-5xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32">
           <h2 className="font-display text-3xl md:text-4xl mb-12 text-center">How it works</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <Step
@@ -169,8 +169,8 @@ function Landing() {
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto px-6 mt-32">
-          <div className="bg-ink rounded-[40px] p-12 md:p-20 text-cream-50 relative overflow-hidden">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32">
+          <div className="bg-ink rounded-[32px] sm:rounded-[40px] p-7 sm:p-12 md:p-20 text-cream-50 relative overflow-hidden">
             <div className="relative z-10 max-w-lg">
               <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-4">
                 For campaign issuers
@@ -268,7 +268,7 @@ function Step({
   tone: string;
 }) {
   return (
-    <article className="bg-white rounded-3xl p-8 border border-stone-200 hover:-translate-y-1 transition-transform">
+    <article className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200 hover:-translate-y-1 transition-transform">
       <div className={`font-display text-5xl mb-6 ${tone}`}>{number}</div>
       <h3 className="font-display text-xl mb-2">{title}</h3>
       <p className="text-sm text-stone-600 leading-relaxed">{description}</p>

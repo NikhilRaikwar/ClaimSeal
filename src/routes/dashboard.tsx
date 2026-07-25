@@ -90,7 +90,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
-      <main className="max-w-6xl mx-auto px-6 pt-6 pb-24">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-16 sm:pb-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
@@ -120,7 +120,7 @@ function Dashboard() {
                 {error}
               </div>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-4 mb-10">
               <Stat label="Published" value={stats.published} tone="text-ink" />
               <Stat label="Active" value={stats.active} tone="text-emerald-bold" />
               <Stat label="Scheduled" value={stats.scheduled} tone="text-amber-bold" />
@@ -132,7 +132,7 @@ function Dashboard() {
               </div>
             )}
             {!loading && !error && campaigns.length === 0 && (
-              <section className="bg-white rounded-[28px] border border-stone-200 p-10 text-center">
+              <section className="bg-white rounded-[28px] border border-stone-200 p-6 sm:p-10 text-center">
                 <h2 className="font-display text-2xl">No published campaigns for this issuer.</h2>
                 <p className="text-stone-600 mt-3">
                   Publish your first signed manifest to create a public verification record.

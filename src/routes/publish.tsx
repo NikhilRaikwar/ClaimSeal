@@ -116,7 +116,7 @@ function PublishPage() {
   return (
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
-      <main className="max-w-4xl mx-auto px-6 pt-6 pb-24">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-16 sm:pb-24">
         <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-2">
           Issuer flow
         </p>
@@ -144,7 +144,7 @@ function PublishPage() {
           ))}
         </div>
 
-        <section className="bg-white rounded-[28px] border border-stone-200 p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.15)] animate-fade-up">
+        <section className="bg-white rounded-[28px] border border-stone-200 p-5 sm:p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.15)] animate-fade-up">
           {error && (
             <div className="mb-6 p-4 rounded-2xl bg-coral-soft border border-coral-bold/25 text-coral-deep text-sm">
               {error}
@@ -186,7 +186,7 @@ function PublishPage() {
                   Campaign records are anchored on X Layer Testnet (chain 1952).
                 </p>
               </div>
-              <div className="p-5 bg-cream-100 rounded-2xl border border-stone-200 flex items-center justify-between gap-4">
+              <div className="p-5 bg-cream-100 rounded-2xl border border-stone-200 flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <div className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-1">
                     Connected wallet
@@ -209,14 +209,14 @@ function PublishPage() {
                   <button
                     onClick={switchNetwork}
                     disabled={busy}
-                    className="px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
+                    className="w-full sm:w-auto px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
                   >
                     {busy ? "Waiting for wallet..." : "Switch to X Layer Testnet"}
                   </button>
                 ) : (
                   <button
                     onClick={() => setStep(3)}
-                    className="px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform"
+                    className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform"
                   >
                     Continue <span aria-hidden>&rarr;</span>
                   </button>
@@ -282,7 +282,7 @@ function PublishPage() {
                 disabled={
                   !form.name || !form.url || !form.contract || !form.validFrom || !form.validUntil
                 }
-                className="px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-40"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-ink text-cream-50 font-medium hover:scale-[1.02] transition-transform disabled:opacity-40"
               >
                 Review <span aria-hidden>&rarr;</span>
               </button>
@@ -317,18 +317,18 @@ function PublishPage() {
                 The registry stores the signed manifest and its hash. No token approval, transfer,
                 or custody is involved.
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
                 <button
                   onClick={signAndPublish}
                   disabled={busy}
-                  className="px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
+                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-emerald-bold text-white font-medium hover:scale-[1.02] transition-transform disabled:opacity-60"
                 >
                   {busy ? "Waiting for wallet and testnet..." : "Sign EIP-712 & anchor"}
                 </button>
                 <button
                   onClick={() => setStep(3)}
                   disabled={busy}
-                  className="px-6 py-3 rounded-full bg-white border border-stone-200 font-medium hover:border-ink transition-colors disabled:opacity-60"
+                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-white border border-stone-200 font-medium hover:border-ink transition-colors disabled:opacity-60"
                 >
                   Back
                 </button>

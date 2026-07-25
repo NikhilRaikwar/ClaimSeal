@@ -17,7 +17,7 @@ const verdictCopy: Record<Verdict, { title: string; body: string; accent: string
   },
   not_published: {
     title: "No active ClaimSeal record was found.",
-    body: "This does not mean the campaign is a scam — only that no issuer has published a signed manifest for it.",
+    body: "This does not mean the campaign is a scam. It only means no issuer has published a signed manifest for it.",
     accent: "text-amber-bold",
     bar: "bg-amber-bold",
   },
@@ -34,67 +34,69 @@ export function PassportCard({
   checkedUrl?: string;
   children?: ReactNode;
 }) {
-  const c = verdictCopy[verdict];
+  const copy = verdictCopy[verdict];
   return (
-    <div className="relative bg-white rounded-[32px] border border-stone-200 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)] overflow-hidden">
-      <div className={`h-2 w-full ${c.bar}`} />
-      <div className="p-8 md:p-12 grid md:grid-cols-[1.6fr_1fr] gap-10">
+    <div className="relative overflow-hidden rounded-[32px] border border-stone-200 bg-white shadow-[0_20px_60px_-30px_rgba(28,25,23,0.25)]">
+      <div className={`h-2 w-full ${copy.bar}`} />
+      <div className="grid gap-8 p-5 sm:p-8 md:grid-cols-[1.6fr_1fr] md:gap-10 md:p-12">
         <div className="space-y-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
                 ClaimSeal / Campaign Record
               </p>
-              <p className="font-display text-2xl">{campaign?.name ?? "Unknown campaign"}</p>
+              <p className="font-display text-2xl break-words">
+                {campaign?.name ?? "Unknown campaign"}
+              </p>
             </div>
-            <div className="text-right space-y-1 hidden md:block">
+            <div className="space-y-1 sm:text-right">
               <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-stone-400">
                 Chain
               </p>
-              <p className="font-mono text-xs">X Layer Testnet · 1952</p>
+              <p className="font-mono text-xs">X Layer Testnet &middot; 1952</p>
             </div>
           </div>
 
           <div className="space-y-4">
-            <p className={`font-display text-2xl md:text-3xl leading-tight ${c.accent}`}>
-              &ldquo;{c.title}&rdquo;
+            <p className={`font-display text-2xl leading-tight sm:text-3xl ${copy.accent}`}>
+              &ldquo;{copy.title}&rdquo;
             </p>
-            <p className="text-stone-600 max-w-lg leading-relaxed">{c.body}</p>
+            <p className="max-w-lg leading-relaxed text-stone-600">{copy.body}</p>
           </div>
 
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-stone-100">
+          <dl className="grid grid-cols-1 gap-4 border-t border-stone-100 pt-4 sm:grid-cols-2">
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-1">
+              <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Checked URL
               </dt>
-              <dd className="font-mono text-xs truncate">{checkedUrl ?? "—"}</dd>
+              <dd className="break-all font-mono text-xs">{checkedUrl ?? "-"}</dd>
             </div>
             <div>
-              <dt className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-1">
+              <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                 Issuer
               </dt>
-              <dd className="font-mono text-xs truncate">{campaign?.issuer ?? "—"}</dd>
+              <dd className="break-all font-mono text-xs">{campaign?.issuer ?? "-"}</dd>
             </div>
             {campaign?.validUntil && (
               <div className="sm:col-span-2">
-                <dt className="font-mono text-[10px] uppercase tracking-widest text-stone-400 mb-1">
+                <dt className="mb-1 font-mono text-[10px] uppercase tracking-widest text-stone-400">
                   Valid
                 </dt>
                 <dd className="font-mono text-xs">
-                  {campaign.validFrom} → {campaign.validUntil}
+                  {campaign.validFrom} &rarr; {campaign.validUntil}
                 </dd>
               </div>
             )}
           </dl>
         </div>
 
-        <div className="relative flex items-center justify-center bg-cream-100 rounded-3xl p-8 min-h-[220px] overflow-hidden">
+        <div className="relative flex min-h-[190px] items-center justify-center overflow-hidden rounded-3xl bg-cream-100 p-6 sm:min-h-[220px] sm:p-8">
           <div
-            className="absolute inset-0 opacity-[0.04] pointer-events-none flex items-center justify-center overflow-hidden"
+            className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden opacity-[0.04]"
             aria-hidden
           >
-            <div className="font-display text-[110px] whitespace-nowrap -rotate-12 leading-none">
-              VERIFIED · VERIFIED
+            <div className="whitespace-nowrap font-display text-[110px] leading-none -rotate-12">
+              VERIFIED &middot; VERIFIED
             </div>
           </div>
           <SealStamp verdict={verdict} />

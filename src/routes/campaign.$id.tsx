@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { SiteFooter } from "@/components/site-footer";
@@ -87,7 +88,7 @@ function CampaignPage() {
   return (
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
-      <main className="max-w-5xl mx-auto px-6 pt-4 pb-24">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-4 pb-16 sm:pb-24">
         <Link
           to="/dashboard"
           className="inline-flex items-center gap-2 text-sm font-medium text-stone-500 hover:text-ink transition-colors mb-6"
@@ -96,12 +97,12 @@ function CampaignPage() {
         </Link>
 
         {loading && (
-          <div className="p-12 bg-white rounded-[32px] border border-stone-200 text-center font-mono text-sm text-stone-500">
+          <div className="p-6 sm:p-12 bg-white rounded-[32px] border border-stone-200 text-center font-mono text-sm text-stone-500">
             Reading campaign record from X Layer Testnet...
           </div>
         )}
         {!loading && error && (
-          <div className="p-10 bg-white rounded-[32px] border border-coral-bold/30">
+          <div className="p-6 sm:p-10 bg-white rounded-[32px] border border-coral-bold/30">
             <p className="font-mono text-[10px] uppercase tracking-widest text-coral-bold">
               Campaign unavailable
             </p>
@@ -116,20 +117,23 @@ function CampaignPage() {
                 {error}
               </div>
             )}
-            <section className="bg-white rounded-[32px] border border-stone-200 p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
+            <section className="bg-white rounded-[32px] border border-stone-200 p-5 sm:p-8 md:p-12 shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)] animate-fade-up">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
                     ClaimSeal / Campaign record
                   </p>
-                  <h1 className="font-display text-4xl md:text-5xl mt-3">{campaign.name}</h1>
+                  <h1 className="font-display text-3xl sm:text-4xl md:text-5xl mt-3 break-words">
+                    {campaign.name}
+                  </h1>
                   <a
                     href={officialUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-block mt-4 font-mono text-sm text-emerald-deep hover:underline break-all"
+                    className="inline-flex max-w-full items-start gap-1 mt-4 font-mono text-sm text-emerald-deep hover:underline break-all"
                   >
-                    {officialUrl} <span aria-hidden>&nearr;</span>
+                    <span>{officialUrl}</span>
+                    <ArrowUpRight aria-hidden className="mt-0.5 size-4 shrink-0" />
                   </a>
                 </div>
                 <span
@@ -139,7 +143,7 @@ function CampaignPage() {
                 </span>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-6 mt-10 pt-8 border-t border-stone-100">
+              <div className="grid sm:grid-cols-2 gap-x-8 lg:gap-x-12 gap-y-6 mt-10 pt-8 border-t border-stone-100">
                 <Detail label="Issuer" value={campaign.issuer} mono />
                 <Detail
                   label="Claim contract"
@@ -166,7 +170,7 @@ function CampaignPage() {
             </section>
 
             <section className="mt-8 grid md:grid-cols-[1.15fr_.85fr] gap-6">
-              <div className="bg-ink rounded-3xl p-8 text-cream-50">
+              <div className="bg-ink rounded-3xl p-5 sm:p-8 text-cream-50">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold">
                   Public verification link
                 </p>
@@ -177,23 +181,23 @@ function CampaignPage() {
                   The verifier only reads the signed record. It never requests a visitor wallet
                   connection.
                 </p>
-                <div className="flex flex-wrap gap-3 mt-6">
+                <div className="grid grid-cols-1 gap-3 mt-6 sm:flex sm:flex-wrap">
                   <Link
                     to="/verify"
                     search={{ url: officialUrl, contract: campaign.claimContract }}
-                    className="px-5 py-3 rounded-full bg-emerald-bold text-white text-sm font-medium"
+                    className="inline-flex w-full justify-center px-5 py-3 rounded-full bg-emerald-bold text-white text-sm font-medium sm:w-auto"
                   >
                     Open verification
                   </Link>
                   <button
                     onClick={copyVerificationLink}
-                    className="px-5 py-3 rounded-full bg-white/10 text-white text-sm font-medium border border-white/10"
+                    className="w-full px-5 py-3 rounded-full bg-white/10 text-white text-sm font-medium border border-white/10 sm:w-auto"
                   >
                     {copied ? "Copied" : "Copy link"}
                   </button>
                 </div>
               </div>
-              <div className="bg-white rounded-3xl p-8 border border-stone-200">
+              <div className="bg-white rounded-3xl p-5 sm:p-8 border border-stone-200">
                 <p className="font-mono text-[10px] uppercase tracking-widest text-stone-400">
                   Issuer controls
                 </p>
@@ -238,18 +242,18 @@ function CampaignPage() {
                     <p className="text-xs text-stone-500 mt-2">
                       This cannot be undone. Future verification becomes MISMATCH.
                     </p>
-                    <div className="flex gap-2 mt-4">
+                    <div className="flex flex-col sm:flex-row gap-2 mt-4">
                       <button
                         onClick={revoke}
                         disabled={busy}
-                        className="px-4 py-2.5 rounded-full bg-coral-bold text-white text-sm font-medium disabled:opacity-60"
+                        className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-coral-bold text-white text-sm font-medium disabled:opacity-60"
                       >
                         {busy ? "Waiting for wallet..." : "Confirm revoke"}
                       </button>
                       <button
                         onClick={() => setConfirming(false)}
                         disabled={busy}
-                        className="px-4 py-2.5 rounded-full bg-white border border-stone-200 text-sm font-medium"
+                        className="w-full sm:w-auto px-4 py-2.5 rounded-full bg-white border border-stone-200 text-sm font-medium"
                       >
                         Cancel
                       </button>
@@ -295,7 +299,7 @@ function Detail({
             rel="noreferrer"
             className="hover:underline text-emerald-deep"
           >
-            {value} <span aria-hidden>&nearr;</span>
+            <ArrowUpRight aria-hidden className="inline-block size-3.5 align-[-0.15em]" />
           </a>
         ) : (
           value

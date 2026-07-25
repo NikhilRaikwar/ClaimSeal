@@ -5,8 +5,8 @@ import { useAccount } from "wagmi";
 
 export function SiteHeader() {
   return (
-    <nav className="flex items-center justify-between px-6 md:px-10 py-6 max-w-7xl mx-auto">
-      <Link to="/" className="flex items-center gap-2.5 group">
+    <nav className="flex items-center justify-between gap-3 px-4 sm:px-6 md:px-10 py-4 sm:py-6 max-w-7xl mx-auto">
+      <Link to="/" className="flex min-w-0 shrink items-center gap-2.5 group">
         <div className="size-9 bg-emerald-bold rounded-full rotate-12 flex items-center justify-center text-white font-display font-bold text-lg shadow-lg shadow-emerald-bold/20 group-hover:rotate-45 transition-transform duration-500">
           C
         </div>
@@ -14,7 +14,7 @@ export function SiteHeader() {
           ClaimSeal<span className="text-emerald-bold">.</span>
         </span>
       </Link>
-      <div className="hidden md:flex items-center gap-8">
+      <div className="hidden lg:flex items-center gap-8">
         <Link
           to="/"
           className="text-sm font-medium text-stone-700 hover:text-emerald-bold transition-colors"
@@ -58,7 +58,7 @@ function HeaderWalletAction() {
             <Link
               to="/dashboard"
               search={{ issuer: account.address }}
-              className="px-5 py-2.5 bg-ink text-cream-50 rounded-full text-sm font-medium hover:scale-105 transition-transform inline-flex items-center gap-1.5"
+              className="shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 bg-ink text-cream-50 rounded-full text-sm font-medium hover:scale-105 transition-transform inline-flex items-center gap-1.5"
             >
               Dashboard <span aria-hidden>&rarr;</span>
             </Link>
@@ -72,7 +72,7 @@ function HeaderWalletAction() {
               openConnectModal();
             }}
             disabled={!mounted}
-            className="px-5 py-2.5 bg-ink text-cream-50 rounded-full text-sm font-medium hover:scale-105 transition-transform inline-flex items-center gap-1.5 disabled:opacity-50"
+            className="shrink-0 whitespace-nowrap px-4 sm:px-5 py-2.5 bg-ink text-cream-50 rounded-full text-sm font-medium hover:scale-105 transition-transform inline-flex items-center gap-1.5 disabled:opacity-50"
           >
             Connect wallet
           </button>
