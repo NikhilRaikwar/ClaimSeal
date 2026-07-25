@@ -153,20 +153,6 @@ curl -X POST "https://claimseal.vercel.app/v1/verify-claim-manifest" \
   -d '{"url":"https://claimseal.vercel.app/verify"}'
 ```
 
-## Demo video plan for OKX.AI Genesis
-
-The hackathon asks for an X post using `#OKXAI` with a clear demo or walkthrough up to 90 seconds.
-
-Recommended cut:
-
-| Time   | Scene             | Show                                                                                                        |
-| ------ | ----------------- | ----------------------------------------------------------------------------------------------------------- |
-| 0–10s  | Problem           | Fake claim links and typo domains trick users. Show ClaimSeal hero.                                         |
-| 10–30s | Publisher flow    | Connect wallet, create campaign, sign manifest, anchor on X Layer Testnet. Fast-forward wallet wait/typing. |
-| 30–50s | Good verification | Paste official URL + contract and show `MATCH`.                                                             |
-| 50–70s | Attack demo       | Change typo domain or wrong contract and show `MISMATCH`.                                                   |
-| 70–90s | ASP value         | Show `verify_claim_manifest`, Agent ID `9234`, and explain OKX.AI ASP use.                                  |
-
 ## Submission checklist
 
 - [x] Live product deployed on HTTPS.
