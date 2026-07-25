@@ -1,0 +1,57 @@
+export const claimSealRegistryAbi = [
+  {
+    type: "function",
+    name: "publish",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "campaignId", type: "bytes32" },
+      { name: "manifestHash", type: "bytes32" },
+      { name: "manifestJson", type: "string" },
+      { name: "validFrom", type: "uint64" },
+      { name: "validUntil", type: "uint64" },
+      { name: "revision", type: "uint64" },
+    ],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "revoke",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "campaignId", type: "bytes32" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "getCampaign",
+    stateMutability: "view",
+    inputs: [{ name: "campaignId", type: "bytes32" }],
+    outputs: [
+      { name: "issuer", type: "address" },
+      { name: "manifestHash", type: "bytes32" },
+      { name: "validFrom", type: "uint64" },
+      { name: "validUntil", type: "uint64" },
+      { name: "revision", type: "uint64" },
+      { name: "revoked", type: "bool" },
+    ],
+  },
+  {
+    type: "function",
+    name: "getManifest",
+    stateMutability: "view",
+    inputs: [{ name: "campaignId", type: "bytes32" }],
+    outputs: [{ name: "manifestJson", type: "string" }],
+  },
+  {
+    type: "event",
+    name: "ManifestPublished",
+    inputs: [
+      { name: "campaignId", type: "bytes32", indexed: true },
+      { name: "issuer", type: "address", indexed: true },
+      { name: "manifestHash", type: "bytes32", indexed: false },
+      { name: "validFrom", type: "uint64", indexed: false },
+      { name: "validUntil", type: "uint64", indexed: false },
+      { name: "revision", type: "uint64", indexed: false },
+    ],
+    anonymous: false,
+  },
+] as const;
