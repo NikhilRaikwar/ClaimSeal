@@ -179,15 +179,15 @@ function Landing() {
         </section>
 
         <section id="issuers" className="max-w-7xl mx-auto px-4 sm:px-6 mt-20 sm:mt-32 scroll-mt-8">
-          <div className="bg-ink rounded-[32px] sm:rounded-[40px] p-7 sm:p-12 md:p-20 text-cream-50 relative overflow-hidden">
-            <div className="relative z-10 max-w-lg">
+          <div className="relative flex min-h-[460px] items-center justify-center overflow-hidden rounded-[32px] bg-ink p-7 text-center text-cream-50 sm:rounded-[40px] sm:p-12 md:p-20">
+            <div className="relative z-10 max-w-2xl">
               <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-4">
                 For campaign issuers
               </p>
               <h2 className="font-display text-4xl md:text-5xl mb-6 leading-tight">
                 Publish a campaign in under a minute.
               </h2>
-              <p className="text-stone-400 mb-8">
+              <p className="mx-auto mb-8 max-w-lg text-stone-400">
                 Connect once, sign your manifest, and anchor a verifiable record. The issuer wallet
                 can revoke it at any time.
               </p>
