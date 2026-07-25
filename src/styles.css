@@ -1,0 +1,183 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-cream-50: var(--cream-50);
+  --color-cream-100: var(--cream-100);
+  --color-cream-200: var(--cream-200);
+  --color-cream-300: var(--cream-300);
+  --color-ink: var(--ink);
+
+  --color-emerald-soft: var(--emerald-soft);
+  --color-emerald-bold: var(--emerald-bold);
+  --color-emerald-deep: var(--emerald-deep);
+  --color-coral-soft: var(--coral-soft);
+  --color-coral-bold: var(--coral-bold);
+  --color-coral-deep: var(--coral-deep);
+  --color-amber-soft: var(--amber-soft);
+  --color-amber-bold: var(--amber-bold);
+  --color-amber-deep: var(--amber-deep);
+  --color-xlayer: var(--xlayer);
+
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 1rem;
+
+  --cream-50: #fdfcfb;
+  --cream-100: #f9f7f2;
+  --cream-200: #f2eee6;
+  --cream-300: #e8e2d5;
+  --ink: #1c1917;
+
+  --emerald-soft: #ecfdf5;
+  --emerald-bold: #059669;
+  --emerald-deep: #064e3b;
+  --coral-soft: #fff1f2;
+  --coral-bold: #e11d48;
+  --coral-deep: #881337;
+  --amber-soft: #fffbeb;
+  --amber-bold: #d97706;
+  --amber-deep: #78350f;
+  --xlayer: #4a9dff;
+
+  --background: #f9f7f2;
+  --foreground: #1c1917;
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+  --primary: #1c1917;
+  --primary-foreground: #f9f7f2;
+  --secondary: #f2eee6;
+  --secondary-foreground: #1c1917;
+  --muted: #f2eee6;
+  --muted-foreground: #78716c;
+  --accent: #ecfdf5;
+  --accent-foreground: #064e3b;
+  --destructive: #e11d48;
+  --destructive-foreground: #ffffff;
+  --border: #ece8de;
+  --input: #ece8de;
+  --ring: #059669;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@keyframes stamp-thud {
+  0% {
+    transform: scale(1.6) rotate(20deg);
+    opacity: 0;
+    filter: blur(6px);
+  }
+  60% {
+    transform: scale(0.95) rotate(-4deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1) rotate(-8deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-stamp {
+  animation: stamp-thud 0.55s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+.stagger-1 {
+  animation-delay: 0.05s;
+}
+.stagger-2 {
+  animation-delay: 0.15s;
+}
+.stagger-3 {
+  animation-delay: 0.25s;
+}
+.stagger-4 {
+  animation-delay: 0.35s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-stamp,
+  .animate-fade-up {
+    animation: none;
+  }
+}
