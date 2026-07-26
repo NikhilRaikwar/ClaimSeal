@@ -50,6 +50,7 @@ function Dashboard() {
     setIssuer(undefined);
     setCampaigns([]);
     setLoading(false);
+    navigate({ to: "/", replace: true });
   }, [address, isConnected, navigate, searchIssuer, status]);
 
   useEffect(() => {
