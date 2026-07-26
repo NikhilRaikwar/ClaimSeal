@@ -12,6 +12,7 @@ import { XLAYER_TESTNET_EXPLORER } from "@/lib/xlayer";
 const searchSchema = z.object({
   url: z.string().default(""),
   contract: z.string().optional(),
+  campaignId: z.string().optional(),
 });
 
 export const Route = createFileRoute("/verify")({
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/verify")({
 });
 
 function VerifyPage() {
-  const { url, contract } = Route.useSearch();
+  const { url, contract, campaignId } = Route.useSearch();
   const [result, setResult] = useState<VerifyResponse>();
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(Boolean(url));
@@ -47,7 +48,11 @@ function VerifyPage() {
     setLoading(true);
     setResult(undefined);
     setError(undefined);
-    void verifyClaim({ url, claimContract: contract || undefined })
+    void verifyClaim({
+      url,
+      claimContract: contract || undefined,
+      campaignId: campaignId?.startsWith("0x") ? (campaignId as `0x${string}`) : undefined,
+    })
       .then((response) => {
         if (!cancelled) setResult(response);
       })
@@ -61,7 +66,7 @@ function VerifyPage() {
     return () => {
       cancelled = true;
     };
-  }, [url, contract]);
+  }, [url, contract, campaignId]);
 
   const rows: EvidenceRow[] = useMemo(() => {
     if (!result) return [];

@@ -48,6 +48,7 @@ function Landing() {
   const { address, isConnected, status } = useAccount();
   const [url, setUrl] = useState("");
   const [contract, setContract] = useState("");
+  const [campaignId, setCampaignId] = useState("");
   const validUrl = /^https:\/\/[^\s]+\.[^\s]+/.test(url.trim());
 
   useEffect(() => {
@@ -60,7 +61,11 @@ function Landing() {
     if (!validUrl) return;
     navigate({
       to: "/verify",
-      search: { url: url.trim(), contract: contract.trim() || undefined },
+      search: {
+        url: url.trim(),
+        contract: contract.trim() || undefined,
+        campaignId: campaignId.trim() || undefined,
+      },
     });
   }
 
@@ -68,7 +73,7 @@ function Landing() {
     <div className="min-h-screen bg-cream-100 text-ink">
       <SiteHeader />
       <main>
-        <header className="relative max-w-6xl mx-auto text-center pt-12 sm:pt-16 md:pt-24 pb-10 sm:pb-14 px-4 sm:px-6 animate-fade-up">
+        <header className="relative mx-auto flex min-h-[calc(100svh-104px)] max-w-6xl flex-col items-center justify-center px-4 pb-16 pt-10 text-center sm:px-6 sm:pb-20 md:min-h-[calc(100svh-116px)] md:pt-16 animate-fade-up">
           <div className="pointer-events-none absolute inset-x-4 top-10 -z-0 mx-auto h-48 max-w-3xl rounded-full bg-emerald-bold/10 blur-3xl" />
           <span className="relative inline-flex items-center gap-2 px-4 py-1.5 bg-white/90 border border-stone-200 rounded-full text-[11px] font-bold uppercase tracking-[0.22em] text-stone-500 mb-8 shadow-sm">
             <span className="size-1.5 rounded-full bg-emerald-bold animate-pulse" />X Layer Testnet
@@ -96,7 +101,7 @@ function Landing() {
 
         <section
           id="verify"
-          className="max-w-3xl mx-auto px-4 sm:px-6 scroll-mt-8 animate-fade-up stagger-2"
+          className="max-w-3xl mx-auto px-4 pt-8 sm:px-6 sm:pt-10 md:pt-12 scroll-mt-24 animate-fade-up stagger-2"
         >
           <form onSubmit={submit} className="surface-card rounded-[30px] p-5 sm:p-6 md:p-8">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -145,6 +150,15 @@ function Landing() {
               onChange={(event) => setContract(event.target.value)}
               placeholder="0x..."
               className="seal-input font-mono text-sm placeholder:text-stone-400"
+            />
+            <label className="mt-5 block font-mono text-[10px] uppercase tracking-widest text-stone-400">
+              Optional campaign ID
+            </label>
+            <input
+              value={campaignId}
+              onChange={(event) => setCampaignId(event.target.value)}
+              placeholder="0x..."
+              className="seal-input mt-2 font-mono text-sm placeholder:text-stone-400"
             />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
               <button

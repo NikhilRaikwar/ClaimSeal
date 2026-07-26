@@ -50,7 +50,7 @@ function CampaignPage() {
   );
   const officialUrl = campaign ? campaignUrl(campaign) : "";
   const verifyUrl = campaign
-    ? `/verify?url=${encodeURIComponent(officialUrl)}&contract=${encodeURIComponent(campaign.claimContract)}`
+    ? `/verify?url=${encodeURIComponent(officialUrl)}&contract=${encodeURIComponent(campaign.claimContract)}&campaignId=${encodeURIComponent(campaign.campaignId)}`
     : "/verify";
 
   async function revoke() {
@@ -184,7 +184,11 @@ function CampaignPage() {
                 <div className="grid grid-cols-1 gap-3 mt-6 sm:flex sm:flex-wrap">
                   <Link
                     to="/verify"
-                    search={{ url: officialUrl, contract: campaign.claimContract }}
+                    search={{
+                      url: officialUrl,
+                      contract: campaign.claimContract,
+                      campaignId: campaign.campaignId,
+                    }}
                     className="seal-button w-full bg-emerald-bold px-5 py-3 text-sm text-white sm:w-auto"
                   >
                     Open verification

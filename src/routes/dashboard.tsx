@@ -14,7 +14,7 @@ export const Route = createFileRoute("/dashboard")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Issuer dashboard - ClaimSeal" },
+      { title: "Campaign dashboard - ClaimSeal" },
       { name: "description", content: "Your published issuer-signed ClaimSeal campaigns." },
     ],
   }),
@@ -98,7 +98,7 @@ function Dashboard() {
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-widest text-emerald-bold mb-2">
-                Issuer dashboard
+                Campaign workspace
               </p>
               <h1 className="font-display text-4xl md:text-5xl">Your campaigns</h1>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-400">

@@ -7,7 +7,7 @@ import { useAccount, useDisconnect } from "wagmi";
 export function SiteHeader() {
   return (
     <nav className="sticky top-0 z-40 mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-4 backdrop-blur sm:px-6 sm:py-5 md:px-10">
-      <Link to="/" className="flex min-w-0 shrink items-center gap-2.5 group">
+      <Link to="/" className="group flex min-w-0 shrink items-center gap-2.5">
         <div className="size-9 overflow-hidden rounded-xl rotate-12 bg-ink shadow-lg shadow-emerald-bold/20 transition-transform duration-500 group-hover:rotate-45">
           <img src="/claimseal-mark.svg" alt="" className="size-full" />
         </div>
@@ -15,22 +15,22 @@ export function SiteHeader() {
           ClaimSeal<span className="text-emerald-bold">.</span>
         </span>
       </Link>
-      <div className="hidden lg:flex items-center gap-8">
+      <div className="hidden items-center gap-8 lg:flex">
         <a
           href="/#verify"
-          className="text-sm font-medium text-stone-700 hover:text-emerald-bold transition-colors"
+          className="text-sm font-medium text-stone-700 transition-colors hover:text-emerald-bold"
         >
           Verify
         </a>
         <a
           href="/#issuers"
-          className="text-sm font-medium text-stone-700 hover:text-emerald-bold transition-colors"
+          className="text-sm font-medium text-stone-700 transition-colors hover:text-emerald-bold"
         >
           For issuers
         </a>
         <a
           href="/#how"
-          className="text-sm font-medium text-stone-700 hover:text-emerald-bold transition-colors"
+          className="text-sm font-medium text-stone-700 transition-colors hover:text-emerald-bold"
         >
           How it works
         </a>
@@ -59,8 +59,7 @@ function HeaderWalletAction() {
           return (
             <details className="relative shrink-0">
               <summary className="seal-button cursor-pointer list-none bg-ink px-4 py-2.5 text-sm text-cream-50 shadow-[0_16px_35px_-24px_rgba(28,25,23,0.9)] [&::-webkit-details-marker]:hidden">
-                <span className="hidden sm:inline">Issuer</span> Dashboard{" "}
-                <ChevronDown aria-hidden className="size-4" />
+                Wallet <ChevronDown aria-hidden className="size-4" />
               </summary>
               <div className="absolute right-0 z-50 mt-3 w-72 overflow-hidden rounded-2xl border border-stone-200 bg-white p-2 shadow-[0_18px_45px_-22px_rgba(28,25,23,0.35)]">
                 <div className="border-b border-stone-100 px-3 py-3">
@@ -80,14 +79,17 @@ function HeaderWalletAction() {
                   className="mt-1 flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-cream-100"
                 >
                   <WalletCards aria-hidden className="size-4 text-emerald-bold" />
-                  Issuer dashboard
+                  My campaigns
                 </Link>
                 <button
                   type="button"
                   onClick={() => {
                     window.localStorage.removeItem("claimseal-issuer");
+                    setConnectIntent(false);
                     disconnect();
-                    navigate({ to: "/", replace: true });
+                    window.setTimeout(() => {
+                      navigate({ to: "/", replace: true });
+                    }, 0);
                   }}
                   className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-coral-deep transition-colors hover:bg-coral-soft"
                 >
