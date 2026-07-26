@@ -65,6 +65,7 @@ export type CampaignSummary = {
   revision: number;
   status: "active" | "revoked" | "expired" | "scheduled";
   registryAddress: Address;
+  publishTransactionHash?: Hex;
 };
 
 export type VerifyResponse = {
@@ -83,6 +84,7 @@ type RegistryConfig = {
 
 type OnchainRecord = {
   campaignId: Hex;
+  publishTransactionHash?: Hex;
   issuer: Address;
   manifestHash: Hex;
   rawManifest: string;
@@ -94,7 +96,7 @@ type OnchainRecord = {
 };
 
 const limitation =
-  "This verifies a wallet-signed campaign record. It does not audit a website or smart contract, or guarantee that a campaign is safe.";
+  "This verifies an issuer-signed campaign record. It does not audit a website or smart contract, or guarantee that a campaign is safe.";
 
 export function readRegistryConfig(): RegistryConfig {
   const address = process.env.CLAIMSEAL_REGISTRY_ADDRESS;
@@ -140,6 +142,7 @@ function parseStoredManifest(rawManifest: string): ClaimManifest {
 async function readRecord(
   config: RegistryConfig,
   campaignId: Hex,
+  publishTransactionHash?: Hex,
 ): Promise<OnchainRecord | undefined> {
   const client = getClient(config);
   const result = await client.readContract({
@@ -161,6 +164,7 @@ async function readRecord(
 
   return {
     campaignId,
+    publishTransactionHash,
     issuer: getAddress(issuer),
     manifestHash: anchoredHash,
     rawManifest,
@@ -172,7 +176,15 @@ async function readRecord(
   };
 }
 
-async function campaignIdsFromEvents(config: RegistryConfig, issuer?: Address): Promise<Hex[]> {
+type PublishedCampaignEvent = {
+  campaignId: Hex;
+  transactionHash?: Hex;
+};
+
+async function campaignIdsFromEvents(
+  config: RegistryConfig,
+  issuer?: Address,
+): Promise<PublishedCampaignEvent[]> {
   const client = getClient(config);
   const latestBlock = await client.getBlockNumber();
   if (latestBlock < config.deploymentBlock) return [];
@@ -190,7 +202,7 @@ async function campaignIdsFromEvents(config: RegistryConfig, issuer?: Address): 
     ranges.push({ fromBlock, toBlock });
   }
 
-  const campaignIds = new Set<Hex>();
+  const campaigns = new Map<Hex, PublishedCampaignEvent>();
   for (let start = 0; start < ranges.length; start += LOG_QUERY_CONCURRENCY) {
     const logsByRange = await Promise.all(
       ranges.slice(start, start + LOG_QUERY_CONCURRENCY).map(({ fromBlock, toBlock }) =>
@@ -206,12 +218,17 @@ async function campaignIdsFromEvents(config: RegistryConfig, issuer?: Address): 
 
     for (const logs of logsByRange) {
       for (const log of logs) {
-        if (log.args.campaignId) campaignIds.add(log.args.campaignId);
+        if (log.args.campaignId) {
+          campaigns.set(log.args.campaignId, {
+            campaignId: log.args.campaignId,
+            transactionHash: log.transactionHash,
+          });
+        }
       }
     }
   }
 
-  return [...campaignIds];
+  return [...campaigns.values()];
 }
 
 async function candidatesForRequest(
@@ -219,11 +236,13 @@ async function candidatesForRequest(
   campaignId?: Hex,
   expectedIssuer?: Address,
 ): Promise<OnchainRecord[]> {
-  const ids = campaignId ? [campaignId] : await campaignIdsFromEvents(config, expectedIssuer);
+  const published = campaignId
+    ? [{ campaignId }]
+    : await campaignIdsFromEvents(config, expectedIssuer);
   const records = await Promise.all(
-    ids.map(async (id) => {
+    published.map(async (item) => {
       try {
-        return await readRecord(config, id);
+        return await readRecord(config, item.campaignId, item.transactionHash);
       } catch {
         return undefined;
       }
@@ -253,6 +272,7 @@ function asSummary(record: OnchainRecord, registryAddress: Address): CampaignSum
     revision: Number(record.revision),
     status: statusFor(record),
     registryAddress,
+    publishTransactionHash: record.publishTransactionHash,
   };
 }
 
@@ -382,7 +402,10 @@ export async function listIssuerCampaigns(issuer: string): Promise<CampaignSumma
 
 export async function getCampaign(campaignId: Hex): Promise<CampaignSummary | undefined> {
   const config = readRegistryConfig();
-  const record = await readRecord(config, campaignId);
+  const publishEvent = (await campaignIdsFromEvents(config)).find(
+    (event) => event.campaignId.toLowerCase() === campaignId.toLowerCase(),
+  );
+  const record = await readRecord(config, campaignId, publishEvent?.transactionHash);
   if (!record || !(await signatureIsValid(record, config))) return undefined;
   return asSummary(record, config.address);
 }

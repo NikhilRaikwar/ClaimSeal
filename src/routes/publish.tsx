@@ -183,7 +183,7 @@ function PublishPage() {
               </div>
               <div className="grid gap-4 rounded-2xl border border-stone-200 bg-cream-100 p-5">
                 <Detail label="Campaign ID" value={published.campaignId} />
-                <Detail label="Registry transaction" value={published.txHash} />
+                <Detail label="Publish transaction" value={published.txHash} />
               </div>
               <div className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
                 <Link

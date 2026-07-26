@@ -14,6 +14,7 @@ export type CampaignSummary = {
   revision: number;
   status: "active" | "revoked" | "expired" | "scheduled";
   registryAddress: Address;
+  publishTransactionHash?: Hex;
 };
 
 export type VerificationCheck = {

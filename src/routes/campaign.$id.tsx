@@ -144,13 +144,19 @@ function CampaignPage() {
               </div>
 
               <div className="grid gap-4 border-t border-stone-100 pt-8 sm:grid-cols-2 lg:gap-5">
-                <Detail label="Issuer" value={campaign.issuer} mono />
+                <Detail label="Campaign ID" value={campaign.campaignId} mono />
                 <Detail
-                  label="Claim contract"
-                  value={campaign.claimContract}
+                  label="Publish transaction"
+                  value={campaign.publishTransactionHash ?? "Indexing from X Layer event logs"}
                   mono
-                  href={`${XLAYER_TESTNET_EXPLORER}/address/${campaign.claimContract}`}
+                  href={
+                    campaign.publishTransactionHash
+                      ? `${XLAYER_TESTNET_EXPLORER}/tx/${campaign.publishTransactionHash}`
+                      : undefined
+                  }
                 />
+                <Detail label="Issuer" value={campaign.issuer} mono />
+                <Detail label="Claim contract reference" value={campaign.claimContract} mono />
                 <Detail
                   label="Path rule"
                   value={campaign.pathRule || "Any path on the canonical host"}
@@ -159,13 +165,6 @@ function CampaignPage() {
                 <Detail label="Manifest revision" value={String(campaign.revision)} />
                 <Detail label="Valid from (UTC)" value={formatDate(campaign.validFrom)} />
                 <Detail label="Valid until (UTC)" value={formatDate(campaign.validUntil)} />
-                <Detail label="Campaign ID" value={campaign.campaignId} mono />
-                <Detail
-                  label="Registry"
-                  value={campaign.registryAddress}
-                  mono
-                  href={`${XLAYER_TESTNET_EXPLORER}/address/${campaign.registryAddress}`}
-                />
               </div>
             </section>
 
@@ -199,6 +198,16 @@ function CampaignPage() {
                   >
                     {copied ? "Copied" : "Copy link"}
                   </button>
+                  {campaign.publishTransactionHash && (
+                    <a
+                      href={`${XLAYER_TESTNET_EXPLORER}/tx/${campaign.publishTransactionHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="seal-button w-full border border-white/10 bg-white/10 px-5 py-3 text-sm text-white sm:w-auto"
+                    >
+                      View publish transaction
+                    </a>
+                  )}
                 </div>
               </div>
               <div className="surface-card rounded-3xl p-5 sm:p-8">

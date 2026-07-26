@@ -7,7 +7,6 @@ import { PassportCard } from "@/components/passport-card";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { toUiVerdict, verifyClaim, type VerifyResponse } from "@/lib/claimseal-api";
-import { XLAYER_TESTNET_EXPLORER } from "@/lib/xlayer";
 
 const searchSchema = z.object({
   url: z.string().default(""),
@@ -75,10 +74,6 @@ function VerifyPage() {
       expected: check.expected ?? "-",
       observed: check.actual ?? humanStatus(check.status),
       ok: ["match", "valid", "active", "not_supplied"].includes(check.status),
-      href:
-        check.field === "registryAnchor" && result.campaign
-          ? `${XLAYER_TESTNET_EXPLORER}/address/${result.campaign.registryAddress}`
-          : undefined,
     }));
   }, [result]);
 
@@ -133,14 +128,13 @@ function VerifyPage() {
 
             <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap">
               {result.campaign && (
-                <a
-                  href={`${XLAYER_TESTNET_EXPLORER}/address/${result.campaign.registryAddress}`}
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  to="/campaign/$id"
+                  params={{ id: result.campaign.campaignId }}
                   className="seal-button w-full border border-stone-200 bg-white px-5 py-3 text-sm sm:w-auto"
                 >
-                  View registry on testnet <ArrowUpRight aria-hidden className="size-4 shrink-0" />
-                </a>
+                  View campaign record <ArrowUpRight aria-hidden className="size-4 shrink-0" />
+                </Link>
               )}
               <button
                 onClick={copyLink}
