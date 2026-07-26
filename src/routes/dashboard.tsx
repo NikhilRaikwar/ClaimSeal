@@ -109,12 +109,20 @@ function Dashboard() {
             </div>
             <div className="flex items-center flex-wrap gap-3">
               {issuer && (
-                <Link
-                  to="/publish"
-                  className="seal-button bg-emerald-bold px-5 py-3 text-sm text-white"
-                >
-                  New campaign <Plus aria-hidden className="size-4" />
-                </Link>
+                <>
+                  <a
+                    href="/#verify"
+                    className="seal-button border border-white/10 bg-white/10 px-5 py-3 text-sm text-white"
+                  >
+                    Verify claim
+                  </a>
+                  <Link
+                    to="/publish"
+                    className="seal-button bg-emerald-bold px-5 py-3 text-sm text-white"
+                  >
+                    New campaign <Plus aria-hidden className="size-4" />
+                  </Link>
+                </>
               )}
             </div>
           </div>

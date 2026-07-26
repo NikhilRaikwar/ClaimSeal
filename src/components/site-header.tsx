@@ -1,6 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { ChevronDown, LogOut, WalletCards } from "lucide-react";
+import { ChevronDown, LogOut, Search, WalletCards } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 
@@ -81,6 +81,13 @@ function HeaderWalletAction() {
                   <WalletCards aria-hidden className="size-4 text-emerald-bold" />
                   My campaigns
                 </Link>
+                <a
+                  href="/#verify"
+                  className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-700 transition-colors hover:bg-cream-100"
+                >
+                  <Search aria-hidden className="size-4 text-emerald-bold" />
+                  Verify a claim
+                </a>
                 <button
                   type="button"
                   onClick={() => {
@@ -89,6 +96,7 @@ function HeaderWalletAction() {
                     disconnect();
                     window.setTimeout(() => {
                       navigate({ to: "/", replace: true });
+                      if (window.location.pathname !== "/") window.location.assign("/");
                     }, 0);
                   }}
                   className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-coral-deep transition-colors hover:bg-coral-soft"
